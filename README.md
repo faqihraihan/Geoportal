@@ -24,6 +24,7 @@ pip install -r requirements.txt
 ```
 	
 ## 3. Menjalankan Program
+
 ```
 set FLASK_APP=app.py
 ```
