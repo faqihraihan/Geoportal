@@ -2,38 +2,37 @@
 
 ## 1. Clone File Github ke Directory Yang Diinginkan
 
-	Lebih mudah memakai Github Desktop. Link Download: [GitHub Desktop](https://desktop.github.com/)
+Lebih mudah memakai Github Desktop. Link Download: [GitHub Desktop](https://desktop.github.com/)
 
 ## 2. Membuat Virtual Environment
 	
-	Setelah Clone, masuk ke Folder 'STP'. Setelah berada didalam folder 'STP', masukkan syntax berikut ke terminal.
+Setelah Clone, masuk ke Folder 'STP'. Setelah berada didalam folder 'STP', masukkan syntax berikut ke terminal.
 
-	Membuat virtual environment:
-  ```
-  python -m venv env
-  ```
+Membuat virtual environment:
+ ```
+ python -m venv env
+ ```
 
-	Aktifasi virtual environment:
-	```
-	env\scripts\activate
-	```
+Aktifasi virtual environment:
+```
+env\scripts\activate
+```
 
-
-	Install library:
-	```
-	pip install -r requirements.txt
-	```
+Install library:
+```
+pip install -r requirements.txt
+```
 	
-	Menjalankan program:
-	```
-	set FLASK_APP=app.py
-	```
-	```
-	set FLASK_DEBUG=1
-	```
-	```
-	flask run
-	```
+Menjalankan program:
+```
+set FLASK_APP=app.py
+```
+```
+set FLASK_DEBUG=1
+```
+```
+flask run
+```
 	
-	Membuka website:
-	[STP - Universitas Hasanuddin](http://127.0.0.1:5000/)
+Membuka situs website:
+[STP - Universitas Hasanuddin](http://127.0.0.1:5000/)
