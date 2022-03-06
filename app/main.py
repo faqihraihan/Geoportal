@@ -5,3 +5,7 @@ main = Blueprint('main', __name__)
 @main.route("/")
 def beranda():
     return render_template("main.html")
+
+@main.route("/dashboard")
+def dashboard():
+    return render_template('dashboard.html')
