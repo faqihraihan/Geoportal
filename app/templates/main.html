@@ -11,7 +11,6 @@
 
   <!-- Favicons -->
   <link href="../static/img/logo-unhas.png" rel="icon">
-  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -37,7 +36,7 @@
     <div class="container d-flex align-items-center">
 
       <!-- <h1 class="logo me-auto"><a href="index.html">STP</a></h1> -->
-      <a href="http://127.0.0.1:5000/" class="logo me-auto"><img src="../static/img/logo-unhas.png" alt="" class="img-fluid"></a>
+      <!-- <a href="http://127.0.0.1:5000/" class="logo me-auto"><img src="../static/img/logo-unhas.png" alt="" class="img-fluid"></a> -->
 
       <nav id="navbar" class="navbar">
         <ul>
@@ -64,23 +63,33 @@
             </ul>
           </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
-
+      <nav class="navbar">
+        <ul class="auth">
+          {% if current_user.is_authenticated %}
+            <li><a class="nav-link scrollto" href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+          {% endif %}
+          {% if not current_user.is_authenticated %}
+            <li><a class="nav-link scrollto" href="{{ url_for('auth.login') }}">Masuk</a></li>
+            <li><a class="signup scrollto" href="{{ url_for('auth.signup') }}">Daftar</a></li>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+            <li><a class="nav-link scrollto" href="{{ url_for('auth.logout') }}">Keluar</a></li>
+          {% endif %}
+        </ul>
+      </nav>
     </div>
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center">
-
+    <!-- <img src="../static/img/unhas.jpg" alt="" height="100%" width="100%"> -->
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
-          <h1>STP</h1>
-          <h2>Universitas Hasanuddin</h2>
-        </div>
+      <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+        <h1>SCIENCE TECHNO PARK</h1>
+        <h2>Universitas Hasanuddin</h2>
       </div>
     </div>
 
@@ -98,16 +107,15 @@
 
         <div class="row content">
           <p>
-            STP adalah wahana (badan khusus) Universitas Hasanuddin yang dikelola secara profesional untuk mengembangkan dan mendorong pertumbuhan ekonomi secara berkelanjutan melalui pengembangan, penerapan ilmu pengetahuan dan teknologi, dan penumbuhan perusahaan pemula berbasis teknologi.
+            STP (Science Techno Park) adalah wahana (badan khusus) Universitas Hasanuddin yang dikelola secara profesional untuk mengembangkan dan mendorong pertumbuhan ekonomi secara berkelanjutan melalui pengembangan, penerapan ilmu pengetahuan dan teknologi, dan penumbuhan perusahaan pemula berbasis teknologi.
           </p>
         </div>
-        <div class="row content">
+        <!-- <div class="row content">
           <div class="col-lg-6">
             <a href="#" class="btn-learn-more">Learn More</a>
           </div>
           <div class="col-lg-6 pt-4 pt-lg-0"></div>
-        </div>
-
+        </div> -->
       </div>
     </section><!-- End About Us Section -->
 

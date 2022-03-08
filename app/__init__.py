@@ -29,5 +29,7 @@ def create_app():
 
     return app
 
+# >>> open file "config.inc.php"
+
 # >>> from app import db, create_app, models
 # >>> db.create_all(app=create_app())
