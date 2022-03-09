@@ -14,15 +14,15 @@ def login():
 def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
 
     user = User.query.filter_by(email=email).first()
 
     if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
+        flash('Email atau Password salah')
         return redirect(url_for('auth.login'))
 
-    login_user(user, remember=remember)
+    login_user(user)
+
     return redirect(url_for('main.dashboard'))
 
 @auth.route('/signup')
@@ -44,7 +44,7 @@ def signup_post():
         return redirect(url_for('auth.signup'))
 
     if password != repassword:
-        flash('Password tidak sama')
+        flash(u'Password berbeda', 'pass-error')
         return redirect(url_for('auth.signup'))
 
     new_user = User(email=email, nama=name, password=generate_password_hash(password, method='sha256'), lvl=lvl)

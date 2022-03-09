@@ -26,19 +26,20 @@
   </div>
   <!-- /.login-logo -->
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div class="notification is-danger">
-        {{ messages[0] }}
-      </div>
-    {% endif %}
-  {% endwith %}
-
   <div class="card">
     <div class="card-body login-card-body">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="notification is-danger">
+            {{ messages[0] }}
+            <label id="is-danger"></label>
+          </div>
+        {% endif %}
+      {% endwith %}
+
       <form action="{{ url_for('auth.login') }}" method="post">
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
+          <input type="email" name="email" class="form-control" placeholder="Email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -46,7 +47,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -55,12 +56,7 @@
         </div>
         <div class="row">
           <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember" name="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
+            <a href="signup" class="text-left finish">Saya belum daftar</a>
           </div>
           <!-- /.col -->
           <div class="col-4">
@@ -69,7 +65,6 @@
           <!-- /.col -->
         </div>
       </form>
-      <a href="signup" class="text-center">Saya belum daftar</a>
     </div>
     <!-- /.login-card-body -->
   </div>

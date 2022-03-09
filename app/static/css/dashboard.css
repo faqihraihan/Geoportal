@@ -4850,6 +4850,7 @@ input[type="button"].btn-block {
 
 .card-body .notification{
   padding: 0 0 1rem 0;
+  color: #dc3545;
 }
 
 .card-title {
@@ -10090,7 +10091,12 @@ button.bg-dark:focus {
   position: absolute;
   top: 15%;
   right: 10%;
-  /* float: right !important; */
+}
+
+.text-left.finish{
+  position: absolute;
+  top: 15%;
+  left: 3%;
 }
 
 @media (min-width: 576px) {
