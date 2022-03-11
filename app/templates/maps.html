@@ -1,0 +1,47 @@
+{% extends 'base-maps.html' %}
+
+{% block body %}
+    <div class="nav">
+        <form action="{{ url_for('main.gis') }}" method="POST" id="formsearch">
+            <div id="nav-search" class="nav-search">
+                <input type="text" name="search" id="search" class="search" placeholder="Temukan Disini" spellcheck="false" autocomplete="off" autofocus=True >
+                <button name="search-btn" id="search-btn" value="search"><i class="fa fa-search" aria-hidden="true"></i></button>
+                <div id="result" class="navresult">
+                    <ul class="search-list" id="search-list"></ul>
+                </div>
+            </div>
+        </form>
+        <button name="home" value="home" id="home" class="btn-home"><i class="fa fa-home" aria-hidden="true"></i></button>
+        <div id="overlay" class="">
+            <div id="title-overlay" class="title-overlay">
+                <i class="fa fa-list"></i><p class="title">Legenda</p><i id="minus-overlay" class="fa fa-minus"></i>
+            </div>
+            <div id="content-overlay" class="content-overlay">
+                <div class="content-overlay-div">
+                    {% block content %}
+                        {% if id %}
+                            <article>
+                                <input type="checkbox" checked>
+                                <div></div>
+                            </article>
+                            <div>
+                                <p class="content">Desa {{ datas.desa }} <img src="{{ url_for('static', filename='img/polygon.svg') }}" alt="Polygon" class="polygon"></p>
+                            </div>
+                        {% else %}
+                            <div>
+                                <p class="content-empty">Tidak ada data</p>
+                            </div>
+                        {% endif %}
+                    {% endblock content %}
+                </div>
+            </div>
+        </div>
+        <div class="widget">
+            <div class="legenda" id="legenda"><i class="fa fa-list"></i></div>
+            <!-- <div class="legenda2"><i class="fa fa-list"></i></div>
+            <div class="legenda3"><i class="fa fa-list"></i></div>
+            <div class="legenda4"><i class="fa fa-list"></i></div> -->
+        </div>
+    </div>
+    {% include 'gis-maps.html' %}
+{% endblock %}

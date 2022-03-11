@@ -140,7 +140,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .navbar ul.auth {
   position:absolute;
-  right: -535px;
+  right: -400px;
 }
 .navbar li {
   position: relative;
