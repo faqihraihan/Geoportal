@@ -32,6 +32,7 @@ def signup():
 @auth.route('/signup', methods=['POST'])
 def signup_post():
     name = request.form.get('name')
+    nohp = request.form.get('nohp')
     email = request.form.get('email')
     password = request.form.get('password')
     repassword = request.form.get('repassword')
@@ -47,7 +48,7 @@ def signup_post():
         flash(u'Password berbeda', 'pass-error')
         return redirect(url_for('auth.signup'))
 
-    new_user = User(email=email, nama=name, password=generate_password_hash(password, method='sha256'), lvl=lvl)
+    new_user = User(email=email, nama=name, nohp = nohp, password=generate_password_hash(password, method='sha256'), lvl=lvl)
 
     db.session.add(new_user)
     db.session.commit()

@@ -11,3 +11,8 @@ def home():
 @login_required
 def dashboard():
     return render_template('dashboard.html', name=current_user.nama)
+
+@main.route("/input_data")
+@login_required
+def input_data():
+    return render_template("input_data.html", name=current_user.nama)
