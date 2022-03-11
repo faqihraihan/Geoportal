@@ -7,10 +7,6 @@ main = Blueprint('main', __name__)
 def home():
     return render_template("main.html")
 
-@main.route("/input_data")
-def input_data():
-    return render_template("input_data.html")
-
 @main.route("/dashboard")
 @login_required
 def dashboard():
@@ -19,4 +15,4 @@ def dashboard():
 @main.route("/input_data")
 @login_required
 def input_data():
-    return render_template("input_data.html", name=current_user.nama)
+    return render_template("input-data.html", name=current_user.nama)
