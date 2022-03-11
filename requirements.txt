@@ -7,6 +7,7 @@ greenlet==1.1.2
 itsdangerous==2.1.0
 Jinja2==3.0.3
 MarkupSafe==2.1.0
+mysqlclient==2.1.0
 SQLAlchemy==1.4.31
 Werkzeug==2.0.3
 mysqlclient

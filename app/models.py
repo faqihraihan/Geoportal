@@ -6,5 +6,5 @@ class User(UserMixin, db.Model):
     email = db.Column(db.VARCHAR(200), unique=True)
     password = db.Column(db.VARCHAR(200))
     nama = db.Column(db.VARCHAR(200))
+    nohp = db.Column(db.VARCHAR(200))
     lvl = db.Column(db.Integer)
-    
