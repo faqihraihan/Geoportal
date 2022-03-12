@@ -248,4 +248,16 @@
     });
   });
 
+  /**
+   * Animation on navigasi profile
+   */
+  on('click', '#nav-profile', function(e) {
+    let profile = select('#dropdown-profile-right');
+    if (profile.classList.contains('active')) {
+      e.preventDefault()
+      profile.classList.remove('active');
+    } else {
+      profile.classList.add('active');
+    }
+  }, true)
 })()

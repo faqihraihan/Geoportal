@@ -12664,6 +12664,49 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
   }
 }
 
+.nav-item .nav-link.nav-profile {
+  padding-top: 6px;
+}
+
+.nav-item .nav-link .profile {
+  height: 30px;
+  padding-right: 18px;
+}
+
+.nav-item .nav-link .iprofile {
+  position: absolute;
+  top: 12.5px;
+  right: 17px;
+  font-size: 12px;
+}
+
+.nav-item .dropdown-menu .div-profile {
+  padding: 16px;
+}
+
+.nav-item .dropdown-menu .div-profile .profile-list{
+  position: absolute;
+  top: 12px;
+  padding: 5px 0 0 15px;
+  color: #212529;
+}
+
+.nav-item .dropdown-menu .div-profile .profile-btn {
+  position: absolute;
+  top: 48px;
+  padding: 3px 10px;
+  margin-left: 16px;
+  border-radius: 3px;
+  color: rgba(255, 255, 255);
+  font-size: 12px;
+  background: rgb(0, 123, 255);
+  border: 2px solid rgb(0, 123, 255);
+}
+
+.nav-item .dropdown-menu .profile {
+  height: 65px;
+}
+
 .nav-sidebar .nav-link > .right,
 .nav-sidebar .nav-link > p > .right {
   position: absolute;
@@ -15293,6 +15336,15 @@ body.text-sm .control-sidebar {
   font-size: 0.875rem;
   padding: 0.5rem 1rem;
   text-align: center;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-footer:hover, .dropdown-header:hover{
+  color: rgb(0, 0, 0);
+}
+
+.dropdown-footer .bi-box-arrow-right{
+  padding: 0 .5rem;
 }
 
 .open:not(.dropup) > .animated-dropdown-menu {
@@ -53026,4 +53078,17 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* Profile Menu UI */
+.nav-item.dropdown .dropdown-menu.dropdown-menu-lg.dropdown-menu-right {
+  transition: all .2s ease-out;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.nav-item.dropdown .dropdown-menu.dropdown-menu-lg.dropdown-menu-right.show {
+  opacity: 1;
+  visibility: visible;
 }
