@@ -118,7 +118,7 @@
             <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
             <li class="nav-item">
-            <a href="{{ url_for('main.dashboard') }}" class="nav-link active">
+            <a href="{{ url_for('main.input_data') }}" class="nav-link {{ input_data_navbar }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                 Input Data
@@ -178,7 +178,7 @@
                 </li>
             </ul>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" >
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-tree"></i>
                 <p>
@@ -264,6 +264,14 @@
                 </li>
             </ul>
             </li>
+            <li class="nav-item">
+            <a href="{{ url_for('auth.input_data_user') }}" class="nav-link {{ input_data_user_navbar }}">
+                <i class="nav-icon fas fa-user"></i>
+                <p>
+                Data User
+                </p>
+            </a>
+            </li>
         </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -323,5 +331,7 @@
     <script src="../static/js/demo.js"></script>
     <!-- AdminLTE dashboard demo -->
     <script src="../static/js/pages/dashboard.js"></script>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -53092,3 +53092,42 @@ input[type=number] {
   opacity: 1;
   visibility: visible;
 }
+
+/* User Edit Btn */
+.card-header .add-user-btn {
+  position: absolute;
+  top: 9px;
+  right: 21px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 12px;
+  background: #28a745;
+}
+
+.table .edit-user-btn{
+  padding: 5px 10px;
+  margin-right: 3px;
+  border-radius: 3px;
+  color: #212529;
+  font-size: 12px;
+  background: #ffc107;
+}
+
+.table .delete-user-btn{
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 12px;
+  background: #dc3545;
+}
+
+/* Form DataTable User */
+.modal-body .modal-footer {
+  padding: 0;
+  border-top: 0;
+}
+
+.modal-body .modal-footer .btn-secondary{
+  background-color: rgb(52, 58, 64);
+}

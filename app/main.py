@@ -1,7 +1,10 @@
+from msilib import add_data
 import folium
 from folium.plugins import MousePosition
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
+from .models import User
+from . import db
 
 main = Blueprint('main', __name__)
 
@@ -10,16 +13,6 @@ def home():
     if current_user.is_authenticated:
         return render_template("main.html", name=current_user.nama)
     return render_template("main.html")
-
-@main.route("/dashboard")
-@login_required
-def dashboard():
-    return render_template('dashboard.html', name=current_user.nama)
-
-@main.route("/input_data")
-@login_required
-def input_data():
-    return render_template("input-data.html", name=current_user.nama)
 
 @main.route("/gis", methods=['GET', 'POST'])
 def gis():
@@ -41,3 +34,14 @@ def gis():
 
     map.save("app/templates/gis-maps.html")
     return render_template("maps.html")
+
+@main.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template('dashboard.html', name=current_user.nama)
+
+@main.route("/input-data")
+@login_required
+def input_data():
+    active = 'active'
+    return render_template("input-data.html", name=current_user.nama, input_data_navbar=active)
