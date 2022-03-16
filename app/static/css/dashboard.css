@@ -53131,3 +53131,11 @@ input[type=number] {
 .modal-body .modal-footer .btn-secondary{
   background-color: rgb(52, 58, 64);
 }
+
+select.form-control.add:invalid{
+  color: #999;
+}
+
+select.form-control option{
+  color: black;
+}

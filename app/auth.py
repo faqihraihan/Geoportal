@@ -81,8 +81,19 @@ def input_data_user_add():
         email = request.form['email']
         nohp = request.form['nohp']
         password = request.form['password']
+        repassword = request.form['repassword']
         lvl = request.form['level']
- 
+
+        user = User.query.filter_by(email=email).first()
+
+        if user: 
+            flash('Email telah digunakan')
+            return redirect(url_for('auth.input_data_user'))
+
+        if password != repassword:
+            flash(u'Password berbeda', 'pass-error')
+            return redirect(url_for('auth.input_data_user'))
+
         add_Data = User(nama=nama, email=email, nohp=nohp, password=generate_password_hash(password, method='sha256'), lvl=lvl)
         
         db.session.add(add_Data)

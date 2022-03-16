@@ -41,6 +41,19 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="notification is-danger">
+                        {% if category == 'pass-error'%}
+                          {{ message }}.
+                        {% else %}
+                          {{ message }}.
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
@@ -124,7 +137,20 @@
                     </div>
                   </div>
                   <div class="form-group input-group">
-                    <input type="text" class="form-control" name="level" placeholder="Level" value="{{row.lvl}}">
+                    <select name="level" class="form-control" required>
+                      <option value="" selected="selected" hidden="hidden">
+                        {% if row.lvl==1 %}Admin{% endif %}
+                        {% if row.lvl==2 %}Operator Geospasial{% endif %}
+                        {% if row.lvl==3 %}Operator Non-Geospasial{% endif %}
+                        {% if row.lvl==4 %}Super User{% endif %}
+                        {% if row.lvl==5 %}User{% endif %}
+                      </option>
+                      <option value="1">Admin</option>
+                      <option value="2">Operator Geospasial</option>
+                      <option value="3">Operator Non-Geospasial</option>
+                      <option value="4">Super User</option>
+                      <option value="5">User</option>
+                    </select>
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-sort-numeric-up"></span>
@@ -183,12 +209,23 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div class="form-group">
-                  <label>Retype password:</label>
-                  <input type="password" class="form-control" name="repassword" required>
-                </div> -->
+                <div class="form-group input-group">
+                  <input type="password" class="form-control" placeholder="Retype password" name="repassword" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-group input-group mb-3">
-                  <input type="number" class="form-control" name="level" placeholder="Level" required>
+                  <select name="level" class="form-control add" required>
+                    <option value="" disabled selected hidden>Level</option>
+                    <option value="1">Admin</option>
+                    <option value="2">Operator Geospasial</option>
+                    <option value="3">Operator Non-Geospasial</option>
+                    <option value="4">Super User</option>
+                    <option value="5">User</option>
+                  </select>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-sort-numeric-up"></span>
