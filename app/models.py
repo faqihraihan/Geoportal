@@ -8,3 +8,11 @@ class User(UserMixin, db.Model):
     nama = db.Column(db.VARCHAR(200))
     nohp = db.Column(db.VARCHAR(200))
     lvl = db.Column(db.Integer)
+
+class Kecamatan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.VARCHAR(200))
+
+class Desa(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.VARCHAR(200))
