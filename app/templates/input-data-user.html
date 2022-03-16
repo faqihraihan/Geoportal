@@ -1,0 +1,273 @@
+{% extends 'base-input-data.html' %}
+
+{% block head %}
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-buttons/css/buttons.bootstrap4.min.css">
+{% endblock %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Data User</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
+              <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
+              <li class="breadcrumb-item active">Data User</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">DataTable User</h3>
+                <a class="add-user-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="notification is-danger">
+                        {% if category == 'pass-error'%}
+                          {{ message }}.
+                        {% else %}
+                          {{ message }}.
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Nama</th>
+                      <th>Email</th>
+                      <th>No. Hp</th>
+                      <th>Level</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in user %}
+                      <tr>
+                        <td>{{row.nama}}</td>
+                        <td>{{row.email}}</td>
+                        <td>{{row.nohp}}</td>
+                        <td>
+                          {% if row.lvl==1 %}Admin{% endif %}
+                          {% if row.lvl==2 %}Operator Geospasial{% endif %}
+                          {% if row.lvl==3 %}Operator Non-Geospasial{% endif %}
+                          {% if row.lvl==4 %}Super User{% endif %}
+                          {% if row.lvl==5 %}User{% endif %}
+                        </td>
+                        <td>
+                          <a class="edit-user-btn" href="/input-data/data-user/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-user-btn" href="/input-data/data-user/delete/{{row.id}}">Hapus</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <!-- Modal Edit Employee-->
+  {% for row in user %}
+    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Ubah Data User</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <form action="{{ url_for('auth.input_data_user_update') }}" method="POST">
+                  <div class="form-group input-group">
+                      <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="text" class="form-control" name="name" placeholder="Full name" value="{{row.nama}}">
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group input-group">
+                    <input type="text" class="form-control" name="nohp" placeholder="No. Hp" value="{{row.nohp}}">
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-address-book"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group input-group">
+                    <input type="text" class="form-control" name="email" placeholder="Email" value="{{row.email}}">
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group input-group">
+                    <select name="level" class="form-control" required>
+                      <option value="" selected="selected" hidden="hidden">
+                        {% if row.lvl==1 %}Admin{% endif %}
+                        {% if row.lvl==2 %}Operator Geospasial{% endif %}
+                        {% if row.lvl==3 %}Operator Non-Geospasial{% endif %}
+                        {% if row.lvl==4 %}Super User{% endif %}
+                        {% if row.lvl==5 %}User{% endif %}
+                      </option>
+                      <option value="1">Admin</option>
+                      <option value="2">Operator Geospasial</option>
+                      <option value="3">Operator Non-Geospasial</option>
+                      <option value="4">Super User</option>
+                      <option value="5">User</option>
+                    </select>
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-sort-numeric-up"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Ubah</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+              
+  <!-- Modal Add Employee-->
+  <div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Tambah User</h4>
+          </div>
+          <div class="modal-body card-body register-card-body">
+            <form action="{{url_for('auth.input_data_user_add')}}" method="POST">
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="name" placeholder="Full name" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-user"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="number" class="form-control" name="nohp" placeholder="No. Hp" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-address-book"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="email" class="form-control" name="email" placeholder="Email" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="password" class="form-control" name="password" placeholder="Password" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="password" class="form-control" placeholder="Retype password" name="repassword" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group mb-3">
+                  <select name="level" class="form-control add" required>
+                    <option value="" disabled selected hidden>Level</option>
+                    <option value="1">Admin</option>
+                    <option value="2">Operator Geospasial</option>
+                    <option value="3">Operator Non-Geospasial</option>
+                    <option value="4">Super User</option>
+                    <option value="5">User</option>
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary" type="submit">Tambah</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- DataTables  & Plugins -->
+  <script src="../static/plugins/dashboard/datatables/jquery.dataTables.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/jszip/jszip.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/pdfmake.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/vfs_fonts.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script>
+    $(function () {
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+{% endblock %}

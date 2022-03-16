@@ -140,7 +140,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .navbar ul.auth {
   position:absolute;
-  right: -535px;
+  right: -29vw;
 }
 .navbar li {
   position: relative;
@@ -175,7 +175,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
   background: rgb(0, 123, 255);
   border: 2px solid rgb(0, 123, 255);
-  
   font-weight: 600;
 }
 .navbar .signup:hover, .navbar .signup:focus:hover {
@@ -201,6 +200,7 @@ h1, h2, h3, h4, h5, h6 {
 .navbar .dropdown ul li {
   min-width: 200px;
 }
+
 .navbar .dropdown ul a {
   padding: 10px 20px;
   font-size: 14px;
@@ -1592,4 +1592,94 @@ section {
   #footer .credits {
     padding-top: 4px;
   }
+}
+
+/* Profile Menu UI */
+.auth .dropdown .nav-profile{
+  padding: 0 30px 0 30px;
+  cursor: pointer;
+}
+
+.auth .dropdown .profile {
+  height: 30px;
+}
+
+.auth .dropdown .iprofile {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 12px;
+}
+
+.auth .dropdown .dropdown-profile-right{
+  position: fixed;
+  right: 0.7%;
+  top: 3rem;
+  background: rgba(255, 255, 255);
+  margin: 0;
+  z-index: 99;
+  box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: .25rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .2s ease-out;
+}
+
+.auth .dropdown .dropdown-profile-right.active{
+  opacity: 1;
+  visibility: visible;
+}
+
+.auth .dropdown .dropdown-profile-right .div-profile{
+  padding: 16px;
+  width: 278px;
+  height: 97px;
+}
+
+.auth .dropdown .div-profile .profile {
+  height: 65px;
+}
+
+.auth .dropdown .div-profile .profile-list{
+  position: absolute;
+  font-size: 1rem;
+  top: 12px;
+  padding: 5px 0 0 15px;
+  color: #212529;
+}
+
+.auth .dropdown .div-profile .profile-btn {
+  position: absolute;
+  top: 48px;
+  padding: 3px 10px;
+  margin-left: 80px;
+  border-radius: 3px;
+  color: rgba(255, 255, 255);
+  font-size: 11px;
+  background: rgb(0, 123, 255);
+  border: 2px solid rgb(0, 123, 255);
+}
+
+.dropdown-divider {
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+}
+
+.navbar a.dropdown-footer {
+  padding: 0;
+}
+
+.navbar a.dropdown-footer {
+  display: block;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 13px;
+}
+
+.dropdown-footer .bi-box-arrow-right{
+  padding: 0 .5rem;
+  font-size: 14px;
 }

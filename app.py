@@ -1,6 +1,7 @@
 from app import app
 
 # python -m venv env
+
 # env\scripts\activate 
 # set FLASK_APP=app.py
 # set FLASK_DEBUG=1

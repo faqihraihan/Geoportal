@@ -1,0 +1,327 @@
+html, body{
+    margin: 0px;
+}
+
+a{
+    color: #000;
+    text-decoration: none;
+}
+
+button{
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+/* Navigasi Search Map Pemanfaatan Desa */
+.nav .nav-search{
+    height: 3.8rem;
+    width: 34rem;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    z-index: 402;
+    top: 1rem;
+    left: 1rem;
+    border-radius: 0.3rem;
+}
+
+.nav .nav-search .search{
+    position: fixed;
+    z-index: 402;
+    outline: none;
+    border: none;
+    font-size: 14px;
+    margin-left: 1.5rem;
+    top: 1rem;
+    left: 1rem;
+    height: 3.8rem;
+    width: 28rem;
+    color: #444444;
+    background-color: rgb(255, 255, 255);
+}
+
+.nav .nav-search .search::placeholder{
+    color: rgba(68, 68, 68, 0.3);
+    font-size: 14px;
+    font-family: "Nunito", sans-serif;
+    font-weight: bold;
+    position: relative;
+}
+
+.nav .nav-search button{
+    position: fixed;
+    z-index: 402;
+}
+
+.nav .nav-search .fa-search{
+    position: relative;
+    color: rgba(68, 68, 68, 0.3);
+    left: 31rem;
+    top: 0.9rem;
+}
+
+.nav .nav-search .fa-search:hover{
+    color: rgb(68, 68, 68);
+}
+
+.search-list{
+    font-size: 12px;
+    padding: 0rem;
+    font-style: none;
+    position: fixed;
+    z-index: 402;
+    top: 4.8rem;
+    left: 1rem;
+}
+
+.search-list .result button, .search-list .result p{
+    font-family: "Nunito", sans-serif;
+    color: rgb(68, 68, 68);
+    text-decoration: none;
+    position: relative;
+    top: 1.2rem;
+    left: 1.6rem;
+}
+
+.search-list .result{
+    height: 3.8rem;
+    width: 34rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.search-list .result:hover{
+    background-color: rgb(243, 243, 243);
+}
+
+.search-list .result:first-child{
+    box-shadow: inset 0 3px 2px -2px rgba(153, 153, 153, 50%);
+}
+
+.search-list .result:last-child{
+    border-bottom-left-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+}
+
+/* Navigasi Button Top Right Map Pemanfaatan Desa */
+.nav button.btn-home{
+    position: fixed;
+    z-index: 402;
+    top: 1rem;
+    right: 1rem;
+    background-color: white;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    box-shadow: -0.6px 0.6px 3px rgba(153, 153, 153, 50%);
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-in{
+    height: 3rem;
+    width: 3rem;
+    line-height: 3rem;
+    border-radius: 50% !important;
+    position: fixed;
+    top: 4.5rem;
+    right: 1rem;
+    box-shadow: -0.6px 0.6px 3px rgba(153, 153, 153, 50%);
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-out{
+    height: 3rem;
+    width: 3rem;
+    line-height: 3rem;
+    border-radius: 50% !important;
+    position: fixed;
+    top: 8rem;
+    right: 1rem;
+    box-shadow: -0.6px 0.6px 3px rgba(153, 153, 153, 50%);
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-in:hover{
+    height: 3rem;
+    width: 3rem;
+    line-height: 3rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.leaflet-control-zoom .leaflet-control-zoom-out:hover{
+    height: 3rem;
+    width: 3rem;
+    line-height: 3rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.leaflet-bar a.leaflet-disabled:hover {
+    background-color: #f4f4f4;
+    color: #bbb;
+}
+
+#overlay {
+    position: absolute;
+    right: 5rem; 
+    top: 1rem; 
+    width: 20%;
+    z-index: 401;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease;
+}
+
+#overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+#overlay .title{
+    padding: 1rem 2rem 1rem 5rem;
+}
+
+#overlay .content{
+    color: #444444;
+    padding: 1.8rem 1rem 1.8rem 5rem;
+    font-weight: normal;
+    font-size: small;
+}
+
+#overlay .content-empty{
+    color: #444444;
+    padding: 1.8rem 1rem 1.8rem 2rem;
+    font-weight: normal;
+    font-size: small;
+}
+
+#overlay .fa-list{
+    padding: 1.4rem 1.4rem 1.4rem 2rem;
+    position: absolute;
+    color: rgb(255, 255, 255);
+}
+
+#overlay .fa-minus{
+    padding: 1.4rem 1.4rem 1.4rem 2rem;
+    top: 0;
+    right: 2px;
+    position: absolute;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+#overlay .polygon{
+    float: right;
+    filter: invert(26%) sepia(0%) saturate(1267%) hue-rotate(207deg) brightness(89%) contrast(88%);
+    width: 2rem;
+    height: 2rem;
+}
+
+.title-overlay{
+    height: 4rem; 
+    background-color:#444444;
+    color: white;
+    border-top-right-radius: 0.3rem;
+    border-top-left-radius: 0.3rem;
+    font-weight: bold;
+    cursor: move;
+}
+
+.content-overlay{
+    width: 100%;
+    height: 500%;
+    background-color: white;
+    border-bottom-right-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+    cursor: default;
+}
+
+.content-overlay-div{
+    width: 100%;
+    height: 20%;
+}
+
+article {
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 1.8rem 1rem 2rem 2rem;
+    float: left;
+    border: 2px solid #444444;
+    box-sizing: border-box;
+    border-radius: 0.3rem;
+}
+
+article div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    color: #444444;
+}
+
+article input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+input[type=checkbox]:checked ~ div {
+    background-color: #444444;
+    color: white;
+}
+
+/* Widget */
+.nav .widget{
+    position: fixed;
+    z-index: 401;
+    height: 4rem;
+    width: 21rem;
+    left: 50%;
+    bottom: 0.2%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(68, 68, 68);
+    border-radius: 0.8rem;
+}
+
+.widget .legenda{
+    position: absolute;
+    height: 3rem;
+    width: 3rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    border-radius: 0.8rem;
+    margin: 0rem 2rem 0 1rem;
+    cursor: pointer;
+    transition: .5s ease;
+}
+
+.legenda .fa-list{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(255, 255, 255);
+    transition: .5s ease;
+}
+
+.legenda.active{
+    background-color: rgb(255, 255, 255)!important;
+}
+
+.legenda .fa-list.active{
+    color: rgb(68, 68, 68)!important;
+}
+
+/* Konten Map Pemanfaatan Desa */
+.info{
+    height: 100%;
+    width: 35rem;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    z-index: 401;
+    right: 0rem;
+    box-shadow: -3px 0 2px -2px rgba(153, 153, 153, 50%);
+}
