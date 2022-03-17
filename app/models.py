@@ -24,3 +24,8 @@ class Kecamatan(db.Model):
 class Desa(db.Model):
     id_desa = db.Column(db.Integer, primary_key=True)
     nama_desa = db.Column(db.VARCHAR(200))
+
+class Kelompok_Tani(db.Model):
+    kode_poktan = db.Column(db.VARCHAR(200), primary_key=True)
+    nama_poktan = db.Column(db.VARCHAR(200))
+    no_sk = db.Column(db.VARCHAR(200))

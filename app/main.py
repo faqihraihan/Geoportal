@@ -4,7 +4,7 @@ import folium
 from folium.plugins import MousePosition
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
-from .models import Desa, Kecamatan, Kabupaten, Provinsi, User
+from .models import Kelompok_Tani, Desa, Kecamatan, Kabupaten, Provinsi, User
 from . import db
 
 main = Blueprint('main', __name__)
@@ -240,4 +240,53 @@ def input_data_desa_delete(id_desa):
     flash("Data telah dihapus")
 
     return redirect(url_for('main.input_data_desa'))
+
+#main data kelompok tani
+@main.route("/input-data/data-kelompok_tani")
+@login_required
+def input_data_kelompok_tani():
+    active = 'active'
+    all_data = Kelompok_Tani.query.all()
+    return render_template("input-data-kelompok_tani.html", name=current_user.nama, input_data_navbar=active, kelompok_tani=all_data)
+
+@main.route("/input-data/data-kelompok_tani/add", methods = ['POST'])
+@login_required
+def input_data_kelompok_tani_add():
+    if request.method == 'POST':
+        kode_poktan = request.form['kode_poktan']
+        nama_poktan = request.form['nama_poktan']
+        no_sk = request.form['no_sk']
+        
+        kelompok_tani = Kelompok_Tani.query.filter_by(kode_poktan=kode_poktan).first()
+        if kelompok_tani:
+            flash('Kode telah digunakan')
+            return redirect(url_for('main.input_data_kelompok_tani'))
+
+        add_Data = Kelompok_Tani(kode_poktan=kode_poktan, nama_poktan=nama_poktan, no_sk=no_sk)
+
+        db.session.add(add_Data)
+        db.session.commit()
+        flash("Data telah ditambahkan", "success")
+        return redirect(url_for('main.input_data_kelompok_tani'))
+
+@main.route("/input-data/data-kelompok_tani/update", methods = ['GET','POST'])
+@login_required
+def input_data_kelompok_tani_update():
+    if request.method == 'POST':
+        update = Kelompok_Tani.query.get(request.form.get('kode_poktan'))
+        update.nama_poktan = request.form['nama_poktan']
+        update.no_sk = request.form['no_sk']
+
+        db.session.commit()
+        flash("Data telah diubah", "success")
+        return redirect(url_for('main.input_data_kelompok_tani'))
+
+@main.route("/input-data/data-kelompok_tani/delete/<kode_poktan>/", methods = ['GET','POST'])
+@login_required
+def input_data_kelompok_tani_delete(kode_poktan):
+    delete = Kelompok_Tani.query.get(kode_poktan)
+    db.session.delete(delete)
+    db.session.commit()
+    flash("Data telah dihapus", "success")
+    return redirect(url_for('main.input_data_kelompok_tani'))
 
