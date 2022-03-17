@@ -4,7 +4,7 @@ import folium
 from folium.plugins import MousePosition
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
-from .models import Kecamatan, Provinsi, User
+from .models import Kecamatan, Kabupaten, Provinsi, User
 from . import db
 
 main = Blueprint('main', __name__)
@@ -94,6 +94,53 @@ def input_data_provinsi_delete(id):
     db.session.commit()
     flash("Data telah dihapus", "success")
     return redirect(url_for('main.input_data_provinsi'))
+
+#main data kabupaten
+@main.route("/input-data/data-kabupaten")
+@login_required
+def input_data_kabupaten():
+    active = 'active'
+    all_data = Kabupaten.query.all()
+    return render_template("input-data-kabupaten.html", name=current_user.nama, input_data_navbar=active, kabupaten=all_data)
+
+@main.route("/input-data/data-kabupaten/add", methods = ['POST'])
+@login_required
+def input_data_kabupaten_add():
+    if request.method == 'POST':
+        id = request.form['id']
+        nama = request.form['nama']
+        
+        kabupaten = Kabupaten.query.filter_by(id=id).first()
+        if kabupaten:
+            flash('ID telah digunakan')
+            return redirect(url_for('main.input_data_kabupaten'))
+
+        add_Data = Kabupaten(id=id, nama=nama)
+
+        db.session.add(add_Data)
+        db.session.commit()
+        flash("Data telah ditambahkan", "success")
+        return redirect(url_for('main.input_data_kabupaten'))
+
+@main.route("/input-data/data-kabupaten/update", methods = ['GET','POST'])
+@login_required
+def input_data_kabupaten_update():
+    if request.method == 'POST':
+        update = Kabupaten.query.get(request.form.get('id'))
+        update.nama = request.form['nama']
+
+        db.session.commit()
+        flash("Data telah diubah", "success")
+        return redirect(url_for('main.input_data_kabupaten'))
+
+@main.route("/input-data/data-kabupaten/delete/<id>/", methods = ['GET','POST'])
+@login_required
+def input_data_kabupaten_delete(id):
+    delete = Kabupaten.query.get(id)
+    db.session.delete(delete)
+    db.session.commit()
+    flash("Data telah dihapus", "success")
+    return redirect(url_for('main.input_data_kabupaten'))
 
 #main data kecamatan
 @main.route("/input-data/data-kecamatan")

@@ -1,0 +1,176 @@
+{% extends 'base-input-data.html' %}
+
+{% block head %}
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../static/plugins/dashboard/datatables-buttons/css/buttons.bootstrap4.min.css">
+{% endblock %}
+
+{% block body %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Data Kabupaten</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
+              <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
+              <li class="breadcrumb-item active">Data Kabupaten</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Data Tabel Kabupaten</h3>
+                <a class="add-user-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-success">
+                        {% if category == 'pass-error'%}
+                          {{ message }}.
+                        {% else %}
+                          {{ message }}.
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID Kabupaten</th>
+                      <th>Nama Kabupaten</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in kabupaten %}
+                      <tr>
+                        <td>{{row.id}}</td>
+                        <td>{{row.nama}}</td>
+                        <td>
+                          <a class="edit-user-btn" href="/input-data/data-kabupaten/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-user-btn" href="/input-data/data-kabupaten/delete/{{row.id}}">Hapus</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <!-- Modal Edit Kabupaten-->
+  {% for row in kabupaten %}
+    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Ubah Data Kabupaten</h4>
+          </div>
+          <div class="modal-body card-body register-card-body">
+            <form action="{{url_for('main.input_data_kabupaten_update')}}" method="POST">
+              <div class="form-group">
+                <label>ID Kabupaten</label>
+                <input type="text" class="form-control" name="id" value="{{row.id}}" readonly>
+              </div>
+              <div class="form-group">
+                <label>Nama Kabupaten</label>
+                <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" value="{{row.nama}}">
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Ubah</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+              
+  <!-- Modal Add Kabupaten -->
+  <div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Tambah Kabupaten</h4>
+        </div>
+        <div class="modal-body card-body register-card-body">
+          <form action="{{url_for('main.input_data_kabupaten_add')}}" method="POST">
+            <div class="form-group">
+              <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" required>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" required>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" type="submit">Tambah</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- DataTables  & Plugins -->
+  <script src="../static/plugins/dashboard/datatables/jquery.dataTables.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="../static/plugins/dashboard/jszip/jszip.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/pdfmake.min.js"></script>
+  <script src="../static/plugins/dashboard/pdfmake/vfs_fonts.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="../static/plugins/dashboard/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script>
+    $(function () {
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+{% endblock %}
