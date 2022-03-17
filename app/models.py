@@ -9,6 +9,14 @@ class User(UserMixin, db.Model):
     nohp = db.Column(db.VARCHAR(200))
     lvl = db.Column(db.Integer)
 
+class Provinsi(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.VARCHAR(200))
+
+class Kabupaten(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.VARCHAR(200))
+
 class Kecamatan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.VARCHAR(200))
