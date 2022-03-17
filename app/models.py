@@ -14,5 +14,5 @@ class Kecamatan(db.Model):
     nama = db.Column(db.VARCHAR(200))
 
 class Desa(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nama = db.Column(db.VARCHAR(200))
+    id_desa = db.Column(db.Integer, primary_key=True)
+    nama_desa = db.Column(db.VARCHAR(200))

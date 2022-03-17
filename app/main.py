@@ -4,7 +4,7 @@ import folium
 from folium.plugins import MousePosition
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
-from .models import Kecamatan, User
+from .models import Desa, Kecamatan, User
 from . import db
 
 main = Blueprint('main', __name__)
@@ -95,3 +95,53 @@ def input_data_kecamatan_delete(id):
     flash("Data telah dihapus")
 
     return redirect(url_for('main.input_data_kecamatan'))
+
+@main.route("/input-data/data-desa")
+@login_required
+def input_data_desa():
+    active = 'active'
+    all_data = Desa.query.all()
+    return render_template("input-data-desa.html", name=current_user.nama, input_data_navbar=active, desa=all_data)
+
+@main.route("/input-data/data-desa/add", methods = ['POST'])
+@login_required
+def input_data_desa_add():
+    if request.method == 'POST':
+        id_desa = request.form['id_desa']
+        nama_desa = request.form['nama_desa']
+        
+        desa = Desa.query.filter_by(id_desa=id_desa).first()
+        if desa:
+            flash('ID telah digunakan')
+            return redirect(url_for('main.input_data_desa'))
+
+        add_Data = Desa(id_desa=id_desa, nama_desa=nama_desa)
+
+        db.session.add(add_Data)
+        db.session.commit()
+        flash("Data telah ditambahkan")
+        
+        return redirect(url_for('main.input_data_desa'))
+
+@main.route("/input-data/data-desa/update", methods = ['GET','POST'])
+@login_required
+def input_data_desa_update():
+    if request.method == 'POST':
+        update = Desa.query.get(request.form.get('id_desa'))
+        update.nama_desa = request.form['nama_desa']
+
+        db.session.commit()
+        flash("Data telah diubah")
+
+        return redirect(url_for('main.input_data_desa'))
+
+@main.route("/input-data/data-desa/delete/<id_desa>/", methods = ['GET','POST'])
+@login_required
+def input_data_desa_delete(id_desa):
+    delete = Desa.query.get(id_desa)
+    db.session.delete(delete)
+    db.session.commit()
+    flash("Data telah dihapus")
+
+    return redirect(url_for('main.input_data_desa'))
+
