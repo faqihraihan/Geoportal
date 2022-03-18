@@ -3,11 +3,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User
 from . import db
+import base64
 
 auth = Blueprint('auth', __name__)
 
 @auth.route("/login")
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
+
     return render_template("login.html")
 
 @auth.route('/login', methods=['POST'])
@@ -27,6 +31,9 @@ def login_post():
 
 @auth.route('/signup')
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
+
     return render_template('signup.html')
 
 @auth.route('/signup', methods=['POST'])
@@ -69,9 +76,12 @@ def logout():
 @auth.route("/input-data/data-user")
 @login_required
 def input_data_user():
+    image=None
+    if current_user.img:
+        image = base64.b64encode(current_user.img).decode('ascii')
     active = 'active'
     all_data = User.query.all()
-    return render_template("input-data-user.html", name=current_user.nama, input_data_user_navbar=active, user=all_data)
+    return render_template("input-data-user.html", img = image, name=current_user.nama, level=current_user.lvl, input_data_user_navbar=active, user=all_data)
 
 @auth.route("/input-data/data-user/add", methods = ['POST'])
 @login_required
@@ -87,18 +97,18 @@ def input_data_user_add():
         user = User.query.filter_by(email=email).first()
 
         if user: 
-            flash('Email telah digunakan')
+            flash('Penambahan dibatalkan. Email telah digunakan')
             return redirect(url_for('auth.input_data_user'))
 
         if password != repassword:
-            flash(u'Password berbeda', 'pass-error')
+            flash(u'Penambahan dibatalkan. Password berbeda', 'pass-error')
             return redirect(url_for('auth.input_data_user'))
 
         add_Data = User(nama=nama, email=email, nohp=nohp, password=generate_password_hash(password, method='sha256'), lvl=lvl)
         
         db.session.add(add_Data)
         db.session.commit()
-        flash("Data telah ditambahkan")
+        flash("Data berhasil ditambahkan")
  
         return redirect(url_for('auth.input_data_user'))
 
@@ -114,7 +124,7 @@ def input_data_user_update():
         update.lvl = request.form['level']
  
         db.session.commit()
-        flash("Data telah diubah")
+        flash("Data berhasil diubah")
  
         return redirect(url_for('auth.input_data_user'))
 
@@ -124,6 +134,55 @@ def input_data_user_delete(id):
     delete = User.query.get(id)
     db.session.delete(delete)
     db.session.commit()
-    flash("Data telah dihapus")
+    flash("Data berhasil dihapus")
  
     return redirect(url_for('auth.input_data_user'))
+
+@auth.route("/profil/me/update-profil", methods = ['GET', 'POST'])
+@login_required
+def update_data_profile_user():
+    if request.method == 'POST':
+        update = User.query.get(request.form.get('id'))
+
+        update.nama = request.form['name']
+        update.nohp = request.form['nohp']
+ 
+        db.session.commit()
+        flash("Data berhasil diubah")
+ 
+        return redirect(url_for('main.profil_me'))
+
+@auth.route("/profil/me/update-pass-profil", methods = ['GET', 'POST'])
+@login_required
+def update_pass_profile_user():
+    if request.method == 'POST':
+        update = User.query.get(request.form.get('id'))
+ 
+        update.password = request.form['password']
+        repassword = request.form['repassword']
+        
+        if update.password != repassword:
+            flash(u'Perubahan dibatalkan. Password berbeda', 'pass-error')
+            return redirect(url_for('main.profil_me'))
+        
+        db.session.commit()
+        flash("Password berhasil diubah")
+ 
+        return redirect(url_for('main.profil_me'))
+
+@auth.route("/profil/me/update-foto-profil", methods = ['GET', 'POST'])
+@login_required
+def update_foto_profile_user():
+    if request.method == 'POST':
+        update = User.query.get(request.form.get('id'))
+
+        img = request.files['fp']
+        img = img.read()
+
+        update.img = img
+
+        db.session.commit()
+
+        flash("Foto profil berhasil diubah")
+ 
+        return redirect(url_for('main.profil_me'))

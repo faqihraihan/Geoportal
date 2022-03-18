@@ -72,14 +72,22 @@
           {% if current_user.is_authenticated %}
             <div class="dropdown">
               <div id="nav-profile" class="nav-profile">
-                <img src="../static/img/user.png" class="profile" alt="User Image">
+                {% if not img %}
+                <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
+                {% else %}
+                <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+                {% endif %}
                 <i class="bi bi-chevron-down iprofile"></i>
               </div>
               <div class="dropdown-profile-right" id="dropdown-profile-right">
                 <div class="div-profile">
-                  <img src="../static/img/user.png" class="profile" alt="User Image">
+                  {% if not img %}
+                  <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
+                  {% else %}
+                  <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+                  {% endif %}
                   <span class="profile-list">{{name}}</span>
-                  <a class="profile-btn" href="#">Edit Profil</a>
+                  <a class="profile-btn" href="{{ url_for('main.profil_me') }}">Profil</a>
                 </div>
                 <div class="dropdown-divider"></div>
                 <a href="{{ url_for('auth.logout') }}" class="dropdown-footer"><i class="bi bi-box-arrow-right"></i>Keluar</a>

@@ -15,13 +15,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data User</h1>
+            <h1 class="m-0">Data Kecamatan</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
               <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
-              <li class="breadcrumb-item active">Data User</li>
+              <li class="breadcrumb-item active">Data Kecamatan</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Table User</h3>
+                <h3 class="card-title">Data Table Kecamatan</h3>
                 <a class="add-user-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
@@ -60,29 +60,19 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>No. Hp</th>
-                      <th>Level</th>
+                      <th>ID Kecamatan</th>
+                      <th>Nama Kecamatan</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for row in user %}
+                    {% for row in kecamatan %}
                       <tr>
+                        <td>{{row.id}}</td>
                         <td>{{row.nama}}</td>
-                        <td>{{row.email}}</td>
-                        <td>{{row.nohp}}</td>
                         <td>
-                          {% if row.lvl==1 %}Admin{% endif %}
-                          {% if row.lvl==2 %}Operator Geospasial{% endif %}
-                          {% if row.lvl==3 %}Operator Non-Geospasial{% endif %}
-                          {% if row.lvl==4 %}Super User{% endif %}
-                          {% if row.lvl==5 %}User{% endif %}
-                        </td>
-                        <td>
-                          <a class="edit-user-btn" href="/input-data/data-user/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-user-btn" href="/input-data/data-user/delete/{{row.id}}">Hapus</a>
+                          <a class="edit-user-btn" href="/input-data/data-kecamatan/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-user-btn" href="/input-data/data-kecamatan/delete/{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -104,19 +94,19 @@
     <!-- /.content -->
   </div>
 
-  <!-- Modal Edit User-->
-  {% for row in user %}
+  <!-- Modal Edit Kecamatan-->
+  {% for row in kecamatan %}
     <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data User</h4>
+              <h4 class="modal-title">Ubah Data Kecamatan</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('auth.input_data_user_update') }}" method="POST">
+              <form action="{{ url_for('main.input_data_kecamatan_update') }}" method="POST">
                   <div class="form-group input-group">
-                      <input type="hidden"  name="id" value="{{row.id}}">
-                    <input type="text" class="form-control" name="name" placeholder="Full name" value="{{row.nama}}">
+                      <input type="hidden"  name="id_kecamatan" value="{{row.id}}">
+                    <input type="number" class="form-control" name="id" placeholder="ID Kecamatan" value="{{row.id}}">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-user"></span>
@@ -124,39 +114,10 @@
                     </div>
                   </div>
                   <div class="form-group input-group">
-                    <input type="text" class="form-control" name="nohp" placeholder="No. Hp" value="{{row.nohp}}">
+                    <input type="text" class="form-control" name="nama" placeholder="Nama Kecamatan" value="{{row.nama}}">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-address-book"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group input-group">
-                    <input type="text" class="form-control" name="email" placeholder="Email" value="{{row.email}}">
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="fas fa-envelope"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group input-group">
-                    <select name="level" class="form-control" required>
-                      <option value="" selected="selected" hidden="hidden">
-                        {% if row.lvl==1 %}Admin{% endif %}
-                        {% if row.lvl==2 %}Operator Geospasial{% endif %}
-                        {% if row.lvl==3 %}Operator Non-Geospasial{% endif %}
-                        {% if row.lvl==4 %}Super User{% endif %}
-                        {% if row.lvl==5 %}User{% endif %}
-                      </option>
-                      <option value="1">Admin</option>
-                      <option value="2">Operator Geospasial</option>
-                      <option value="3">Operator Non-Geospasial</option>
-                      <option value="4">Super User</option>
-                      <option value="5">User</option>
-                    </select>
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="fas fa-sort-numeric-up"></span>
                       </div>
                     </div>
                   </div>
@@ -171,17 +132,17 @@
     </div>
   {% endfor %}
               
-  <!-- Modal Add User-->
+  <!-- Modal Add Kecamatan-->
   <div id="mymodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah User</h4>
+            <h4 class="modal-title">Tambah Kecamatan</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('auth.input_data_user_add')}}" method="POST">
+            <form action="{{url_for('main.input_data_kecamatan_add')}}" method="POST">
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="name" placeholder="Full name" required>
+                  <input type="number" class="form-control" name="id" placeholder="ID Kecamatan" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-user"></span>
@@ -189,49 +150,10 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="number" class="form-control" name="nohp" placeholder="No. Hp" required>
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Kecamatan" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-address-book"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                  <input type="email" class="form-control" name="email" placeholder="Email" required>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-envelope"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                  <input type="password" class="form-control" name="password" placeholder="Password" required>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-lock"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                  <input type="password" class="form-control" placeholder="Retype password" name="repassword" required>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-lock"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group mb-3">
-                  <select name="level" class="form-control add" required>
-                    <option value="" disabled selected hidden>Level</option>
-                    <option value="1">Admin</option>
-                    <option value="2">Operator Geospasial</option>
-                    <option value="3">Operator Non-Geospasial</option>
-                    <option value="4">Super User</option>
-                    <option value="5">User</option>
-                  </select>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
                     </div>
                   </div>
                 </div>

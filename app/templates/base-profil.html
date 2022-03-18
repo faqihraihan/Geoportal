@@ -54,6 +54,9 @@
         <a href="{{ url_for('main.home') }}" class="nav-link">Beranda</a>
         </li>
         </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ url_for('main.dashboard') }}" class="nav-link">Dashboard</a>
+        </li>
         {% if not (level == 4 or level == 5) %}
             <li class="nav-item d-none d-sm-inline-block">
             <a href="{{ url_for('main.input_data') }}" class="nav-link">Input Data</a>
@@ -70,7 +73,6 @@
             {% else %}
             <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
             {% endif %}
-            <!-- <img src="../static/img/user.png" class="profile" alt="User Image"> -->
             <i class="bi bi-chevron-down iprofile"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -101,31 +103,6 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-            {% if not img %}
-            <img src="../static/img/user.png" class="img-circle elevation-2" alt="User Image">
-            {% else %}
-            <img src="data:;base64,{{ img }}" class="img-circle elevation-2" alt="User Image">
-            {% endif %}
-        </div>
-        <div class="info">
-            <a href="{{ url_for('main.profil_me') }}" class="d-block">{{ name }}</a>
-        </div>
-        </div>
-
-        <!-- SidebarSearch Form -->
-        <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-            <button class="btn btn-sidebar">
-                <i class="fas fa-search fa-fw"></i>
-            </button>
-            </div>
-        </div>
-        </div>
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
@@ -133,122 +110,41 @@
             <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
             <li class="nav-item">
-            <a href="{{ url_for('main.dashboard') }}" class="nav-link active">
+            <a href="{{ url_for('main.profil_me') }}" class="nav-link {{ profil_navbar }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                Dashboard
+                Profil
                 </p>
             </a>
             </li>
             <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-chart-pie"></i>
+            <a href="" class="nav-link">
+                <i class="nav-icon fas fa-edit"></i>
                 <p>
-                Informasi Kegiatan
+                Ubah
                 <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a class="nav-link" href="/profil/me/update-foto-profil/{{id}}" data-toggle="modal" data-target="#modaleditfp{{id}}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Internet Masuk Desa</p>
+                    <p>Foto Profil</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a class="nav-link" href="/profil/me/update-profil/{{id}}" data-toggle="modal" data-target="#modaleditprofil{{id}}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Sektor Pertanian</p>
+                    <p>Data Pribadi</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" href="/profil/me/update-pass-profil/{{id}}" data-toggle="modal" data-target="#modaleditpass{{id}}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Sektor Peternakan</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Sektor Perikanan</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Micro Finance</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Mini Market</p>
+                    <p>Password</p>
                 </a>
                 </li>
             </ul>
-            </li>
-            <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-tree"></i>
-                <p>
-                Bisnis Pertanian
-                <i class="fas fa-angle-left right"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Bibit</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pupuk Organik</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pupuk Non Organik</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pestisida</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Fungisida</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Herbisida</p>
-                </a>
-                </li>
-            </ul>
-            </li>
-            <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-egg"></i>
-                <p>
-                Bisnis Peternakan
-                </p>
-            </a>
-            </li>
-            <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-fish"></i>
-                <p>
-                Bisnis Perikanan
-                </p>
-            </a>
             </li>
         </ul>
         </nav>
@@ -257,6 +153,108 @@
     <!-- /.sidebar -->
     </aside>
     {% block body %}{% endblock %}
+
+    <!-- Modal Ubah Foto Profil User-->
+    {% for row in user %}
+    <div id="modaleditfp{{row.id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ubah Foto Profil</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+                <form action="{{ url_for('auth.update_foto_profile_user') }}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group input-group">
+                        <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="file" class="form-control" name="fp" value="{{row.fp}}" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Ubah</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal Ubah Data User-->
+    <div id="modaleditprofil{{row.id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ubah Data Pribadi</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+                <form action="{{ url_for('auth.update_data_profile_user') }}" method="POST">
+                    <div class="form-group input-group">
+                        <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="text" class="form-control" name="name" placeholder="Full name" value="{{row.nama}}" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-group input-group">
+                    <input type="text" class="form-control" name="nohp" placeholder="No. Hp" value="{{row.nohp}}" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                        <span class="fas fa-address-book"></span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Ubah</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal Ubah Password-->
+    <div id="modaleditpass{{row.id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ubah Password</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+                <form action="{{ url_for('auth.update_pass_profile_user') }}" method="POST">
+                    <div class="form-group input-group">
+                        <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="password" class="form-control" name="password" placeholder="New Password" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-group input-group">
+                    <input type="password" class="form-control" name="repassword" placeholder="Retype password" required>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Ubah</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endfor %}
 
     <!-- /.content-wrapper -->
     <footer class="main-footer">
@@ -307,7 +305,7 @@
     <script src="../static/js/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../static/js/demo.js"></script>
-    <!-- AdminLTE dashboard demo  -->
+    <!-- AdminLTE dashboard demo -->
     <script src="../static/js/pages/dashboard.js"></script>
 </body>
 </html>

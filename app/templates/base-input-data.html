@@ -63,14 +63,22 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
         <a class="nav-link nav-profile" data-toggle="dropdown" href="#">
-            <img src="../static/img/user.png" class="profile" alt="User Image">
+            {% if not img %}
+            <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
+            {% else %}
+            <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+            {% endif %}
             <i class="bi bi-chevron-down iprofile"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <div class="div-profile">
-                <img src="../static/img/user.png" class="profile" alt="User Image">
+                {% if not img %}
+                <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
+                {% else %}
+                <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+                {% endif %}
                 <span class="profile-list">{{name}}</span>
-                <a class="profile-btn" href="#">Edit Profil</a>
+                <a class="profile-btn" href="{{ url_for('main.profil_me') }}">Profil</a>
             </div>
             <div class="dropdown-divider"></div>
             <a href="{{ url_for('auth.logout') }}" class="dropdown-footer"><i class="bi bi-box-arrow-right"></i>Keluar</a>
@@ -93,10 +101,14 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
+            {% if not img %}
             <img src="../static/img/user.png" class="img-circle elevation-2" alt="User Image">
+            {% else %}
+            <img src="data:;base64,{{ img }}" class="img-circle elevation-2" alt="User Image">
+            {% endif %}
         </div>
         <div class="info">
-            <a href="#" class="d-block">{{ name }}</a>
+            <a href="{{ url_for('main.profil_me') }}" class="d-block">{{ name }}</a>
         </div>
         </div>
 
@@ -126,7 +138,7 @@
             </a>
             </li>
             <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="" class="nav-link {{ input_data_master_navbar }}">
                 <i class="nav-icon fas fa-chart-pie"></i>
                 <p>
                 Data Master
@@ -135,25 +147,25 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_provinsi') }}" class="nav-link {{ input_data_provinsi_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Provinsi</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_kabupaten') }}" class="nav-link {{ input_data_kabupaten_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Kabupaten</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_kecamatan') }}" class="nav-link {{ input_data_kecamatan_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Kecamatan</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_desa') }}" class="nav-link {{ input_data_desa_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Desa</p>
                 </a>
@@ -179,7 +191,7 @@
             </ul>
             </li>
             <li class="nav-item" >
-            <a href="#" class="nav-link">
+            <a href="" class="nav-link {{ input_data_pertanian_navbar }}">
                 <i class="nav-icon fas fa-tree"></i>
                 <p>
                 Data Pertanian
@@ -190,13 +202,13 @@
                 <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Data Gapoktan</p>
+                    <p>Gapoktan</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_kelompok_tani') }}" class="nav-link {{ input_data_kelompok_tani_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Data Kelompok Tani</p>
+                    <p>Kelompok Tani</p>
                 </a>
                 </li>
                 <li class="nav-item">
@@ -264,14 +276,16 @@
                 </li>
             </ul>
             </li>
-            <li class="nav-item">
-            <a href="{{ url_for('auth.input_data_user') }}" class="nav-link {{ input_data_user_navbar }}">
-                <i class="nav-icon fas fa-user"></i>
-                <p>
-                Data User
-                </p>
-            </a>
-            </li>
+            {% if level == 1 %}
+                <li class="nav-item">
+                <a href="{{ url_for('auth.input_data_user') }}" class="nav-link {{ input_data_user_navbar }}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>
+                    Data User
+                    </p>
+                </a>
+                </li>
+            {% endif %}
         </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -1683,3 +1683,7 @@ section {
   padding: 0 .5rem;
   font-size: 14px;
 }
+
+.img-circle {
+  border-radius: 50%;
+}
