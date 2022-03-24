@@ -3044,4 +3044,36 @@
   exports.Treeview = Treeview;
 
   Object.defineProperty(exports, '__esModule', { value: true });
+
+  $('#prov').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-kabupaten/live-search",
+      data: {
+          'provinsi_response' : $('#prov').val()
+      },
+      success: searchProvSuccess,
+    });
+  });
+
+  function searchProvSuccess(data){
+    $('#kab-response').html(data);
+    $('#kab-response').append(data.htmlresponse);
+  }
+
+  $('#kab-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-kecamatan/live-search",
+      data: {
+          'kabupaten_response' : $('#kab-response').val()
+      },
+      success: searchSuccess,
+    });
+  });
+
+  function searchSuccess(data){
+    $('#kec-response').html(data);
+    $('#kec-response').append(data.htmlresponse);
+  }
 }));

@@ -35,9 +35,6 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
 
-      <!-- <h1 class="logo me-auto"><a href="index.html">STP</a></h1> -->
-      <!-- <a href="http://127.0.0.1:5000/" class="logo me-auto"><img src="../static/img/logo-unhas.png" alt="" class="img-fluid"></a> -->
-
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link scrollto active" href="#hero">Beranda</a></li>
@@ -126,12 +123,6 @@
             STP (Science Techno Park) adalah wahana (badan khusus) Universitas Hasanuddin yang dikelola secara profesional untuk mengembangkan dan mendorong pertumbuhan ekonomi secara berkelanjutan melalui pengembangan, penerapan ilmu pengetahuan dan teknologi, dan penumbuhan perusahaan pemula berbasis teknologi.
           </p>
         </div>
-        <!-- <div class="row content">
-          <div class="col-lg-6">
-            <a href="#" class="btn-learn-more">Learn More</a>
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0"></div>
-        </div> -->
       </div>
     </section><!-- End About Us Section -->
 
@@ -759,6 +750,79 @@
   <!-- Template Main JS File -->
   <script src="..\static\js\main.js"></script>
 
+  <!-- CHARTS -->
+  <script src="../static/plugins/dashboard/jquery/jquery.min.js"></script>
+  <!-- <script src="../static/plugins/dashboard/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+  <!-- <script src="../static/js/dashboard.js"></script> -->
+  <script src="../static/plugins/dashboard/chart.js/Chart.min.js"></script>
+  <!-- <script src="../static/js/demo.js"></script> -->
+
+  <script>
+ $(function () {
+  'use strict'
+    // Sales graph chart
+    var salesGraphChartCanvas = $('#line-chart').get(0).getContext('2d')
+    // $('#revenue-chart').get(0).getContext('2d');
+
+    var salesGraphChartData = {
+      labels: ['{{ data.time[0] }}', '{{ data.time[1] }}','{{ data.time[2] }}','{{ data.time[3] }}','{{ data.time[4] }}','{{ data.time[5] }}'],
+      datasets: [
+        {
+          label: 'Harga Beras (Rp)',
+          fill: false,
+          borderWidth: 2,
+          lineTension: 0,
+          spanGaps: true,
+          borderColor: '#3c8dbc',
+          pointRadius: 3,
+          pointHoverRadius: 7,
+          pointColor: '#3c8dbc',
+          pointBackgroundColor: '#3c8dbc',
+          data: ['{{ data.price[0] }}', '{{ data.price[1] }}', '{{ data.price[2] }}', '{{ data.price[3] }}', '{{ data.price[4] }}', '{{ data.price[5] }}', '11000', '10000']
+        }
+      ]
+    }
+
+    var salesGraphChartOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            fontColor: '#212529'
+          },
+          gridLines: {
+            display: false,
+            color: '#212529',
+            drawBorder: false
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            stepSize: 200,
+            fontColor: '#212529'
+          },
+          gridLines: {
+            display: true,
+            color: 'rgba(52, 58, 64, .3)',
+            drawBorder: false
+          }
+        }]
+      }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    // eslint-disable-next-line no-unused-vars
+    var salesGraphChart = new Chart(salesGraphChartCanvas, { // lgtm[js/unused-local-variable]
+      type: 'line',
+      data: salesGraphChartData,
+      options: salesGraphChartOptions
+    })
+  })
+  </script>
 </body>
 
 </html>
