@@ -53094,7 +53094,7 @@ input[type=number] {
 }
 
 /* User Edit Btn */
-.card-header .add-user-btn {
+.card-header .add-input-data-btn {
   position: absolute;
   top: 9px;
   right: 21px;
@@ -53105,7 +53105,7 @@ input[type=number] {
   background: #28a745;
 }
 
-.table .edit-user-btn{
+.table .edit-input-data-btn{
   padding: 5px 10px;
   margin-right: 3px;
   border-radius: 3px;
@@ -53114,7 +53114,7 @@ input[type=number] {
   background: #ffc107;
 }
 
-.table .delete-user-btn{
+.table .delete-input-data-btn{
   padding: 5px 10px;
   border-radius: 3px;
   color: #fff;

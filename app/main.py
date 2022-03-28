@@ -1,3 +1,4 @@
+from itertools import count
 import folium
 import base64
 from folium.plugins import MousePosition
@@ -106,15 +107,15 @@ def input_data_desa():
         image = base64.b64encode(current_user.img).decode('ascii')
 
     provinsi = Provinsi.query.all()
+    kabupaten = Kabupaten.query.all()
+    kecamatan = Kecamatan.query.all()
     all_data = Desa.query.all()
-    return render_template("input-data-desa.html", img = image, name=current_user.nama, level=current_user.lvl, input_data_desa_navbar=active, input_data_master_navbar=active, provinsi=provinsi, desa=all_data)
+    return render_template("input-data-desa.html", img = image, name=current_user.nama, level=current_user.lvl, input_data_desa_navbar=active, input_data_master_navbar=active, provinsi=provinsi, kabupaten=kabupaten, kecamatan=kecamatan, desa=all_data)
 
 @main.route("/input-data/data-desa/add", methods = ['POST'])
 @login_required
 def input_data_desa_add():
     if request.method == 'POST':
-        id_prov = request.form['provinsi']
-        id_kab = request.form['kabupaten']
         id_kec = request.form['kecamatan']
         id_desa = request.form['id']
         id = id_kec+id_desa
@@ -125,7 +126,7 @@ def input_data_desa_add():
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_desa'))
 
-        add_Data = Desa(id_prov=id_prov, id_kab=id_kab, id_kec=id_kec, id_desa=id_desa, id=id, nama=nama)
+        add_Data = Desa(id=id, id_kec=id_kec, nama=nama)
         
         db.session.add(add_Data)
         db.session.commit()
@@ -174,26 +175,25 @@ def input_data_kecamatan():
 @login_required
 def live_search_data_kecamatan():
     if request.method == 'POST':
-        tag = request.form['kabupaten_response']
-        kecamatan = Kecamatan.query.filter(Kecamatan.id_kab.like(tag))
+        id = request.form['kabupaten_response']
+        kecamatan = Kecamatan.query.filter(Kecamatan.id_kab.like(id))
     return jsonify({'htmlresponse': render_template('data-kecamatan-response.html', kecamatan=kecamatan)})
 
 @main.route("/input-data/data-kecamatan/add", methods = ['POST'])
 @login_required
 def input_data_kecamatan_add():
     if request.method == 'POST':
-        id_prov = request.form['provinsi']
         id_kab = request.form['kabupaten']
         id_kec = request.form['id']
         id = id_kab+id_kec
         nama = request.form['nama']
 
-        kecamatan = Kecamatan.query.filter_by(id=id).first()
-        if kecamatan: 
+        kec = Kecamatan.query.filter_by(id=id).first()
+        if kec: 
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_kecamatan'))
 
-        add_Data = Kecamatan(id_prov=id_prov, id_kab=id_kab, id_kec=id_kec, id=id, nama=nama)
+        add_Data = Kecamatan(id=id, id_kab=id_kab, nama=nama)
         
         db.session.add(add_Data)
         db.session.commit()
@@ -206,7 +206,17 @@ def input_data_kecamatan_add():
 def input_data_kecamatan_update():
     if request.method == 'POST':
         update = Kecamatan.query.get(request.form.get('id_kecamatan'))
-        update.id = request.form['id']
+
+        id_kab = request.form['kabupaten']
+        id_kec = request.form['id']
+        id = id_kab+id_kec
+        kec = Kecamatan.query.filter_by(id=id).first()
+        if kec: 
+            flash('ID telah digunakan')
+            return redirect(url_for('main.input_data_kecamatan'))
+
+        update.id_kab = id_kab
+        update.id = id
         update.nama = request.form['nama']
  
         db.session.commit()
@@ -241,8 +251,8 @@ def input_data_kabupaten():
 @login_required
 def live_search_data_kabupaten():
     if request.method == 'POST':
-        tag = request.form['provinsi_response']
-        kabupaten = Kabupaten.query.filter(Kabupaten.id_prov.like(tag))
+        id = request.form['provinsi_response']
+        kabupaten = Kabupaten.query.filter(Kabupaten.id_prov.like(id))
     return jsonify({'htmlresponse': render_template('data-kabupaten-response.html', kabupaten=kabupaten)})
 
 @main.route("/input-data/data-kabupaten/add", methods = ['POST'])
@@ -254,12 +264,12 @@ def input_data_kabupaten_add():
         id = id_prov+id_kab
         nama = request.form['nama']
 
-        kabupaten = Kabupaten.query.filter_by(id=id).first()
-        if kabupaten: 
+        kab = Kabupaten.query.filter_by(id=id).first()
+        if kab: 
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_kabupaten'))
 
-        add_Data = Kabupaten(id_prov=id_prov, id_kab=id_kab, id=id, nama=nama)
+        add_Data = Kabupaten(id=id, id_prov=id_prov, nama=nama)
         
         db.session.add(add_Data)
         db.session.commit()
@@ -272,9 +282,17 @@ def input_data_kabupaten_add():
 def input_data_kabupaten_update():
     if request.method == 'POST':
         update = Kabupaten.query.get(request.form.get('id_kabupaten'))
-        update.id_prov = request.form['provinsi']
-        update.id_kab = request.form['id']
-        update.id = update.id_prov+update.id_kab
+
+        id_prov = request.form['provinsi']
+        id_kab = request.form['id']
+        id = id_prov+id_kab
+        kab = Kabupaten.query.filter_by(id=id).first()
+        if kab: 
+            flash('ID telah digunakan')
+            return redirect(url_for('main.input_data_kabupaten'))
+
+        update.id_prov = id_prov
+        update.id = id
         update.nama = request.form['nama']
  
         db.session.commit()
@@ -311,8 +329,8 @@ def input_data_provinsi_add():
         id = request.form['id']
         nama = request.form['nama']
 
-        provinsi = Provinsi.query.filter_by(id=id).first()
-        if provinsi: 
+        prov = Provinsi.query.filter_by(id=id).first()
+        if prov: 
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_provinsi'))
 
@@ -329,9 +347,16 @@ def input_data_provinsi_add():
 def input_data_provinsi_update():
     if request.method == 'POST':
         update = Provinsi.query.get(request.form.get('id_provinsi'))
-        update.id = request.form['id']
+
+        id = request.form['id']
+        prov = Provinsi.query.filter_by(id=id).first()
+        if prov: 
+            flash('ID telah digunakan')
+            return redirect(url_for('main.input_data_provinsi'))
+
+        update.id = id
         update.nama = request.form['nama']
- 
+
         db.session.commit()
         flash("Data berhasil diubah")
  

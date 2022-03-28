@@ -53,7 +53,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Data Table Kabupaten</h3>
-                <a class="add-user-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+                <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -71,8 +71,8 @@
                         <td>{{row.id}}</td>
                         <td>{{row.nama}}</td>
                         <td>
-                          <a class="edit-user-btn" href="/input-data/data-kabupaten/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-user-btn" href="/input-data/data-kabupaten/delete/{{row.id}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-kabupaten/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-kabupaten/delete/{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -106,11 +106,11 @@
               <form action="{{ url_for('main.input_data_kabupaten_update') }}" method="POST">
                 <div class="form-group input-group">
                   <select name="provinsi" class="form-control" required>
-                    <option value="" selected="selected" hidden="hidden">
+                    <option value="{{ row.provinsi.id }}" selected="selected" hidden="hidden">
                       {{row.provinsi.nama}}
                     </option> 
-                    {% for row in kabupaten %} 
-                      <option value="{{ row.provinsi.id }}">{{ row.provinsi.nama }}</option>
+                    {% for row in provinsi %} 
+                      <option value="{{ row.id }}">{{ row.nama }}</option>
                     {% endfor %}
                   </select>
                   <div class="input-group-append">
@@ -121,7 +121,7 @@
                 </div>
                 <div class="form-group input-group">
                     <input type="hidden"  name="id_kabupaten" value="{{row.id}}">
-                  <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" value="{{row.id_kab}}">
+                  <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" value="{{row.id}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-sort-numeric-up"></span>

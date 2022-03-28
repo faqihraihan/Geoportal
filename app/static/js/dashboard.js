@@ -3045,35 +3045,71 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-  $('#prov').click(function() {
+  /**
+   * Menu Input Data Master
+   * ====================================================
+   */
+  $('#prov-add-response').click(function() {
     $.ajax({
       type: "POST",
       url: "/input-data/data-kabupaten/live-search",
       data: {
-          'provinsi_response' : $('#prov').val()
+          'provinsi_response' : $('#prov-add-response').val()
       },
-      success: searchProvSuccess,
+      success: searchProvAddSuccess,
     });
   });
 
-  function searchProvSuccess(data){
-    $('#kab-response').html(data);
-    $('#kab-response').append(data.htmlresponse);
+  function searchProvAddSuccess(data){
+    $('#kab-add-response').html(data);
+    $('#kab-add-response').append(data.htmlresponse);
   }
 
-  $('#kab-response').click(function() {
+  $('#prov-edit-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-kabupaten/live-search",
+      data: {
+          'provinsi_response' : $('#prov-edit-response').val()
+      },
+      success: searchProvEditSuccess,
+    });
+  });
+
+  function searchProvEditSuccess(data){
+    $('#kab-edit-response').html(data);
+    $('#kab-edit-response').append(data.htmlresponse);
+  }
+
+  $('#kab-add-response').click(function() {
     $.ajax({
       type: "POST",
       url: "/input-data/data-kecamatan/live-search",
       data: {
-          'kabupaten_response' : $('#kab-response').val()
+          'kabupaten_response' : $('#kab-add-response').val()
       },
-      success: searchSuccess,
+      success: searchKabAddSuccess,
     });
   });
 
-  function searchSuccess(data){
-    $('#kec-response').html(data);
-    $('#kec-response').append(data.htmlresponse);
+  function searchKabAddSuccess(data){
+    $('#kec-add-response').html(data);
+    $('#kec-add-response').append(data.htmlresponse);
+  }
+
+  $('#kab-edit-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-kecamatan/live-search",
+      data: {
+          'kabupaten_response' : $('#kab-edit-response').val()
+      },
+      success: searchKabEditSuccess,
+    });
+  });
+
+  function searchKabEditSuccess(data){
+    $('#kec-edit-response').html(data);
+    $('#kec-edit-response').append(data.htmlresponse);
   }
 }));

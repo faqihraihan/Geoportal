@@ -53,7 +53,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Data Table Kelompok Tani</h3>
-                <a class="add-user-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+                <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -73,8 +73,8 @@
                         <td>{{row.nama}}</td>
                         <td>{{row.no_sk}}</td>
                         <td>
-                          <a class="edit-user-btn" href="/input-data/data-kelompok-tani/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-user-btn" href="/input-data/data-kelompok-tani/delete/{{row.id}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-kelompok-tani/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-kelompok-tani/delete/{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}

@@ -53,7 +53,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Data Table Desa</h3>
-                <a class="add-user-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+                <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -71,8 +71,8 @@
                         <td>{{row.id}}</td>
                         <td>{{row.nama}}</td>
                         <td>
-                          <a class="edit-user-btn" href="/input-data/data-desa/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-user-btn" href="/input-data/data-desa/delete/{{row.id}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-desa/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-desa/delete/{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -104,27 +104,66 @@
             </div>
             <div class="modal-body card-body register-card-body">
               <form action="{{ url_for('main.input_data_desa_update') }}" method="POST">
-                  <div class="form-group input-group">
-                      <input type="hidden"  name="id_desa" value="{{row.id}}">
-                    <input type="number" class="form-control" name="id" placeholder="ID Desa" value="{{row.id}}">
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="fas fa-sort-numeric-up"></span>
-                      </div>
+                <div class="form-group input-group">
+                  <select name="provinsi" id="prov-edit-response" class="form-control add" required> 
+                    <option value="{{ row.kecamatan.kabupaten.provinsi.id }}" selected="selected" hidden="hidden">
+                      {{row.kecamatan.kabupaten.provinsi.nama}}
+                    </option> 
+                    {% for row in provinsi %} 
+                      <option value="{{ row.id }}">{{ row.nama }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
                     </div>
                   </div>
-                  <div class="form-group input-group">
-                    <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="bi bi-geo-alt"></span>
-                      </div>
+                </div>
+                <div class="form-group input-group">
+                  <select name="kabupaten" class="form-control add" id="kab-edit-response" required> 
+                    <option value="{{ row.kecamatan.kabupaten.id }}" selected="selected" hidden="hidden">
+                      {{row.kecamatan.kabupaten.nama}}
+                    </option> 
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
                     </div>
                   </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Ubah</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+                <div class="form-group input-group">
+                  <select name="kabupaten" class="form-control add" id="kec-edit-response" required> 
+                    <option value="{{ row.kecamatan.id }}" selected="selected" hidden="hidden">
+                      {{row.kecamatan.nama}}
+                    </option> 
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
                   </div>
+                </div>
+                <div class="form-group input-group">
+                    <input type="hidden"  name="id_desa" value="{{row.id}}">
+                  <input type="number" class="form-control" name="id" placeholder="ID Desa" value="{{row.id_desa}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary" type="submit">Ubah</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
               </form>
             </div>
         </div>
@@ -142,7 +181,7 @@
           <div class="modal-body card-body register-card-body">
             <form action="{{url_for('main.input_data_desa_add')}}" method="POST">
               <div class="form-group input-group">
-                <select name="provinsi" id="prov" class="form-control add" required> 
+                <select name="provinsi" id="prov-add-response" class="form-control add" required> 
                   <option value="" disabled selected hidden>Provinsi</option>  
                   {% for row in provinsi %} 
                     <option value="{{ row.id }}">{{ row.nama }}</option>
@@ -155,7 +194,7 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <select name="kabupaten" class="form-control add" id="kab-response" required> 
+                <select name="kabupaten" class="form-control add" id="kab-add-response" required> 
                   <option value="" disabled selected hidden>Kabupaten</option>  
                 </select>
                 <div class="input-group-append">
@@ -165,7 +204,7 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <select name="kecamatan" class="form-control add" id="kec-response" required> 
+                <select name="kecamatan" class="form-control add" id="kec-add-response" required> 
                   <option value="" disabled selected hidden>Kecamatan</option>  
                 </select>
                 <div class="input-group-append">
