@@ -31,13 +31,39 @@ class Desa(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     id_kec = db.Column(db.Integer, db.ForeignKey('kecamatan.id'))
     nama = db.Column(db.VARCHAR(200))
+    gapoktan = db.relationship("Gapoktan", backref="desa")
 
 class Kelompok_Tani(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     nama = db.Column(db.VARCHAR(200))
     no_sk = db.Column(db.VARCHAR(200)) 
 
-class Peta_Desa(db.Model):
-    id = db.Column(db.BigInteger, primary_key=True)
+class Gapoktan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_desa = db.Column(db.BigInteger, db.ForeignKey('desa.id'))
     nama = db.Column(db.VARCHAR(200))
-    json = db.Column(db.JSON) 
+    alamat = db.Column(db.VARCHAR(200))
+    telepon = db.Column(db.VARCHAR(200))
+    tahun_terbentuk = db.Column(db.VARCHAR(200))
+
+class Komoditi(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.VARCHAR(200))
+    bibit = db.relationship("Bibit", backref="komoditi")
+    
+class Bibit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_kom = db.Column(db.Integer, db.ForeignKey('komoditi.id'))
+    nama = db.Column(db.VARCHAR(200))
+    volume = db.Column(db.Integer)
+    satuan = db.Column(db.VARCHAR(200))
+    harga = db.Column(db.Integer)
+    pemulia = db.Column(db.VARCHAR(200))
+
+class Pupuk(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.VARCHAR(200))
+    volume = db.Column(db.Integer)
+    satuan = db.Column(db.VARCHAR(200))
+    harga = db.Column(db.Integer)
+    pemulia = db.Column(db.VARCHAR(200))

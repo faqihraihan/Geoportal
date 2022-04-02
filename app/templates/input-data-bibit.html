@@ -15,13 +15,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Kabupaten</h1>
+            <h1 class="m-0">Data Bibit</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
               <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
-              <li class="breadcrumb-item active">Data Kabupaten</li>
+              <li class="breadcrumb-item active">Data Bibit</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Table Kabupaten</h3>
+                <h3 class="card-title">Data Table Bibit</h3>
                 <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
@@ -60,19 +60,25 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>ID Kabupaten</th>
-                      <th>Nama Kabupaten</th>
+                      <th>ID Bibit</th>
+                      <th>Nama Bibit</th>
+                      <th>Volume Bibit</th>
+                      <th>Harga Bibit</th>
+                      <th>Pemulia Bibit</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for row in kabupaten %}
+                    {% for row in bibit %}
                       <tr>
                         <td>{{row.id}}</td>
                         <td>{{row.nama}}</td>
+                        <td>{{row.volume}} {{row.satuan}}</td>
+                        <td>Rp {{row.harga}}</td>
+                        <td>{{row.pemulia}}</td>
                         <td>
-                          <a class="edit-input-data-btn" href="/input-data/data-kabupaten/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-kabupaten/delete/{{row.id}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-bibit/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-bibit/delete/{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -94,18 +100,19 @@
     <!-- /.content -->
   </div>
 
-  <!-- Modal Edit Kabupaten-->
-  {% for row in kabupaten %}
+  <!-- Modal Edit Bibit-->
+  {% for row in bibit %}
     <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Kabupaten</h4>
+              <h4 class="modal-title">Ubah Data Bibit</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_kabupaten_update') }}" method="POST">
+              <form action="{{ url_for('main.input_data_bibit_update') }}" method="POST">
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="provinsi" placeholder="Nama Provinsi" value="{{row.provinsi.nama}}" disabled>
+                  <input type="hidden"  name="id_kom" value="{{row.id_kom}}">
+                  <input type="text" class="form-control" name="komoditi" placeholder="Nama Komoditi" value="{{row.komoditi.id}} {{row.komoditi.nama}}" disabled>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="bi bi-geo-alt"></span>
@@ -113,8 +120,8 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                    <input type="hidden"  name="id_kabupaten" value="{{row.id}}">
-                  <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" value="{{row.id}}" disabled>
+                    <input type="hidden"  name="id" value="{{row.id}}">
+                  <input type="number" class="form-control" name="id" placeholder="ID Bibit" value="{{row.id}}" disabled>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-sort-numeric-up"></span>
@@ -122,7 +129,39 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" value="{{row.nama}}">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Bibit" value="{{row.nama}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="volume" placeholder="Volume Bibit" value="{{row.volume}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="satuan" placeholder="Satuan" value="{{row.satuan}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="harga" placeholder="Harga Bibit" value="{{row.harga}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="pemulia" placeholder="Pemulia/Pemegang Paten" value="{{row.pemulia}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="bi bi-geo-alt"></span>
@@ -140,20 +179,20 @@
     </div>
   {% endfor %}
               
-  <!-- Modal Add Kabupaten-->
+  <!-- Modal Add Bibit-->
   <div id="mymodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Kabupaten</h4>
+            <h4 class="modal-title">Tambah Bibit</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_kabupaten_add')}}" method="POST">
+            <form action="{{url_for('main.input_data_bibit_add')}}" method="POST">
               <div class="form-group input-group">
-                <select name="provinsi" class="form-control add" required> 
-                  <option value="" disabled selected hidden>Provinsi</option>  
-                  {% for row in provinsi %} 
-                    <option value="{{ row.id }}">{{ row.nama }}</option>
+                <select name="komoditi" class="form-control add" required> 
+                  <option value="" disabled selected hidden>Komoditi</option>  
+                  {% for row in komoditi %} 
+                    <option value="{{ row.id }}">{{ row.id }} | {{ row.nama }}</option>
                   {% endfor %}
                 </select>
                 <div class="input-group-append">
@@ -163,7 +202,7 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" required>
+                <input type="number" class="form-control" name="id" placeholder="ID Bibit" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -171,7 +210,39 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" required>
+                <input type="text" class="form-control" name="nama" placeholder="Nama Bibit" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="volume" placeholder="Volume" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="satuan" placeholder="satuan" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="harga" placeholder="Harga" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="pemulia" placeholder="Pemulia/Pemegang Paten" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="bi bi-geo-alt"></span>

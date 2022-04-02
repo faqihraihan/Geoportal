@@ -105,35 +105,24 @@
             <div class="modal-body card-body register-card-body">
               <form action="{{ url_for('main.input_data_kecamatan_update') }}" method="POST">
                 <div class="form-group input-group">
-                  <select name="provinsi" id="prov-edit-response" class="form-control add" required> 
-                    <option value="{{ row.kabupaten.provinsi.id }}" selected="selected" hidden="hidden">
-                      {{row.kabupaten.provinsi.nama}}
-                    </option> 
-                    {% for row in provinsi %} 
-                      <option value="{{ row.id }}">{{ row.nama }}</option>
-                    {% endfor %}
-                  </select>
+                  <input type="text" class="form-control" name="provinsi" placeholder="Nama Provinsi" value="{{row.kabupaten.provinsi.nama}}" disabled>
                   <div class="input-group-append">
                     <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
+                      <span class="bi bi-geo-alt"></span>
                     </div>
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <select name="kabupaten" class="form-control add" id="kab-edit-response" required> 
-                    <option value="{{ row.kabupaten.id }}" selected="selected" hidden="hidden">
-                      {{row.kabupaten.nama}}
-                    </option> 
-                  </select>
+                  <input type="text" class="form-control" name="kabupaten" placeholder="Nama Kabupaten" value="{{row.kabupaten.nama}}" disabled>
                   <div class="input-group-append">
                     <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
+                      <span class="bi bi-geo-alt"></span>
                     </div>
                   </div>
                 </div>
                 <div class="form-group input-group">
-                    <input type="hidden"  name="id_kecamatan" value="{{row.id}}">
-                  <input type="number" class="form-control" name="id" placeholder="ID Kecamatan" value="{{row.id_kec}}">
+                  <input type="hidden"  name="id_kecamatan" value="{{row.id}}">
+                  <input type="number" class="form-control" name="id" placeholder="ID Kecamatan" value="{{row.id}}" disabled>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-sort-numeric-up"></span>

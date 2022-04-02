@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, url_for, redirect, request, flash,
 from flask_login import login_required, current_user
 from bs4 import BeautifulSoup
 import requests
-from .models import Kelompok_Tani, User, Desa, Kecamatan, Kabupaten, Provinsi, Peta_Desa
+from .models import Kelompok_Tani, User, Desa, Kecamatan, Kabupaten, Provinsi, Gapoktan, Komoditi, Pupuk, Bibit
 from . import db
 
 main = Blueprint('main', __name__)
@@ -139,7 +139,6 @@ def input_data_desa_add():
 def input_data_desa_update():
     if request.method == 'POST':
         update = Desa.query.get(request.form.get('id_desa'))
-        update.id = request.form['id']
         update.nama = request.form['nama']
  
         db.session.commit()
@@ -207,16 +206,11 @@ def input_data_kecamatan_update():
     if request.method == 'POST':
         update = Kecamatan.query.get(request.form.get('id_kecamatan'))
 
-        id_kab = request.form['kabupaten']
-        id_kec = request.form['id']
-        id = id_kab+id_kec
         kec = Kecamatan.query.filter_by(id=id).first()
         if kec: 
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_kecamatan'))
 
-        update.id_kab = id_kab
-        update.id = id
         update.nama = request.form['nama']
  
         db.session.commit()
@@ -283,16 +277,6 @@ def input_data_kabupaten_update():
     if request.method == 'POST':
         update = Kabupaten.query.get(request.form.get('id_kabupaten'))
 
-        id_prov = request.form['provinsi']
-        id_kab = request.form['id']
-        id = id_prov+id_kab
-        kab = Kabupaten.query.filter_by(id=id).first()
-        if kab: 
-            flash('ID telah digunakan')
-            return redirect(url_for('main.input_data_kabupaten'))
-
-        update.id_prov = id_prov
-        update.id = id
         update.nama = request.form['nama']
  
         db.session.commit()
@@ -346,15 +330,14 @@ def input_data_provinsi_add():
 @login_required
 def input_data_provinsi_update():
     if request.method == 'POST':
-        update = Provinsi.query.get(request.form.get('id_provinsi'))
+        update = Provinsi.query.get(request.form.get('id'))
 
-        id = request.form['id']
-        prov = Provinsi.query.filter_by(id=id).first()
+        nama = request.form['nama']
+        prov = Provinsi.query.filter_by(nama=nama).first()
         if prov: 
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_provinsi'))
 
-        update.id = id
         update.nama = request.form['nama']
 
         db.session.commit()
@@ -485,3 +468,191 @@ def input_data_peta_desa_delete(id):
     flash("Data berhasil dihapus")
  
     return redirect(url_for('main.input_data_peta_desa'))
+
+@main.route("/input-data/data-gapoktan")
+@login_required
+def input_data_gapoktan():
+    active = 'active'
+
+    image=None
+    if current_user.img:
+        image = base64.b64encode(current_user.img).decode('ascii')
+
+    provinsi = Provinsi.query.all()
+    kabupaten = Kabupaten.query.all()
+    kecamatan = Kecamatan.query.all()
+    desa = Desa.query.all()
+    all_data = Gapoktan.query.all()
+    return render_template("input-data-gapoktan.html", img = image, name=current_user.nama, level=current_user.lvl, input_data_gapoktan_navbar=active, input_data_master_navbar=active, provinsi=provinsi, kabupaten=kabupaten, kecamatan=kecamatan, desa=desa, gapoktan=all_data)
+
+@main.route("/input-data/data-komoditi")
+@login_required
+def input_data_komoditi():
+    active = 'active'
+
+    image=None
+    if current_user.img:
+        image = base64.b64encode(current_user.img).decode('ascii')
+
+    all_data = Komoditi.query.all()
+    return render_template("input-data-komoditi.html", img = image, name=current_user.nama, level=current_user.lvl, input_data_komoditi_navbar=active, input_data_master_navbar=active, komoditi=all_data)
+
+@main.route("/input-data/data-bibit")
+@login_required
+def input_data_bibit():
+    active = 'active'
+
+    image=None
+    if current_user.img:
+        image = base64.b64encode(current_user.img).decode('ascii')
+
+    komoditi = Komoditi.query.all()
+    all_data = Bibit.query.all()
+    return render_template("input-data-bibit.html", img = image, name=current_user.nama, level=current_user.lvl, input_data_bibit_navbar=active, input_data_master_navbar=active, komoditi=komoditi, bibit=all_data)
+
+@main.route("/input-data/data-gapoktan/add", methods = ['POST'])
+@login_required
+def input_data_gapoktan_add():
+    if request.method == 'POST':
+        id_desa = request.form['id']
+        nama = request.form['nama']
+        alamat = request.form['alamat']
+        telepon = request.form['telepon']
+        tahun_terbentuk = request['tahun']
+
+        gapoktan = Gapoktan.query.filter_by(id=id).first()
+        if gapoktan: 
+            flash('ID telah digunakan')
+            return redirect(url_for('main.input_data_gapoktan'))
+
+        add_Data = Gapoktan(id_desa=id_desa, nama=nama, alamat=alamat, telepon=telepon, tahun_terbentuk=tahun_terbentuk)
+        
+        db.session.add(add_Data)
+        db.session.commit()
+        flash("Data berhasil ditambahkan")
+ 
+        return redirect(url_for('main.input_data_gapoktan'))
+
+@main.route("/input-data/data-komoditi/add", methods = ['POST'])
+@login_required
+def input_data_komoditi_add():
+    if request.method == 'POST':
+        id = request.form['id']
+        nama = request.form['nama']
+        
+        komoditi = Komoditi.query.filter_by(nama=nama).first()
+        if komoditi: 
+            flash('Nama komoditi telah digunakan')
+            return redirect(url_for('main.input_data_komoditi'))
+
+        add_Data = Komoditi(id=id, nama=nama)
+        
+        db.session.add(add_Data)
+        db.session.commit()
+        flash("Data berhasil ditambahkan")
+ 
+        return redirect(url_for('main.input_data_komoditi'))
+
+@main.route("/input-data/data-bibit/add", methods = ['POST'])
+@login_required
+def input_data_bibit_add():
+    if request.method == 'POST':
+        id = request.form['id']
+        id_kom = request.form['komoditi']
+        nama = request.form['nama']
+        volume = request.form['volume']
+        satuan = request.form['satuan']
+        harga = request.form['harga']
+        pemulia = request.form['pemulia']
+        
+        bibit = Bibit.query.filter_by(id=id).first()
+        if bibit: 
+            flash('Nama bibit telah digunakan')
+            return redirect(url_for('main.input_data_bibit'))
+
+        add_Data = Bibit(id=id, id_kom=id_kom, nama=nama, volume=volume, satuan=satuan, harga=harga, pemulia=pemulia)
+        
+        db.session.add(add_Data)
+        db.session.commit()
+        flash("Data berhasil ditambahkan")
+ 
+        return redirect(url_for('main.input_data_bibit'))
+
+@main.route("/input-data/data-gapoktan/update", methods = ['GET', 'POST'])
+@login_required
+def input_data_gapoktan_update():
+    if request.method == 'POST':
+        update = Gapoktan.query.get(request.form.get('id'))
+        update.nama = request.form['nama']
+ 
+        db.session.commit()
+        flash("Data berhasil diubah")
+ 
+        return redirect(url_for('main.input_data_gapoktan'))
+
+@main.route("/input-data/data-komoditi/update", methods = ['GET', 'POST'])
+@login_required
+def input_data_komoditi_update():
+    if request.method == 'POST':
+        update = Komoditi.query.get(request.form.get('id'))
+        update.id = request.form['id']
+        update.nama = request.form['nama']
+
+        db.session.commit()
+        flash("Data berhasil diubah")
+ 
+        return redirect(url_for('main.input_data_komoditi'))
+
+@main.route("/input-data/data-bibit/update", methods = ['GET', 'POST'])
+@login_required
+def input_data_bibit_update():
+    if request.method == 'POST':
+        update = Bibit.query.get(request.form.get('id'))
+        update.nama = request.form['nama']
+        update.volume = request.form['volume']
+        update.satuan = request.form['satuan']
+        update.harga = request.form['harga']
+        update.pemulia = request.form['pemulia']
+
+        db.session.commit()
+        flash("Data berhasil diubah")
+ 
+        return redirect(url_for('main.input_data_bibit'))
+
+@main.route("/input-data/data-gapoktan/delete/<id>/", methods = ['GET', 'POST'])
+@login_required
+def input_data_gapoktan_delete(id):
+    delete = Gapoktan.query.get(id)
+    db.session.delete(delete)
+    db.session.commit()
+    flash("Data berhasil dihapus")
+ 
+    return redirect(url_for('main.input_data_gapoktan'))
+
+@main.route("/input-data/data-komoditi/delete/<id>/", methods = ['GET', 'POST'])
+@login_required
+def input_data_komoditi_delete(id):
+    delete = Komoditi.query.get(id)
+    db.session.delete(delete)
+    db.session.commit()
+    flash("Data berhasil dihapus")
+ 
+    return redirect(url_for('main.input_data_komoditi'))
+
+@main.route("/input-data/data-bibit/delete/<id>/", methods = ['GET', 'POST'])
+@login_required
+def input_data_bibit_delete(id):
+    delete = Bibit.query.get(id)
+    db.session.delete(delete)
+    db.session.commit()
+    flash("Data berhasil dihapus")
+ 
+    return redirect(url_for('main.input_data_bibit'))
+
+@main.route("/input-data/data-desa/live-search", methods=['GET', 'POST'])
+@login_required
+def live_search_data_desa():
+    if request.method == 'POST':
+        id = request.form['kecamatan_response']
+        desa = Desa.query.filter(Desa.id_kec.like(id))
+    return jsonify({'htmlresponse': render_template('data-desa-response.html', desa=desa)})

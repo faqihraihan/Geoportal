@@ -105,8 +105,8 @@
             <div class="modal-body card-body register-card-body">
               <form action="{{ url_for('main.input_data_provinsi_update') }}" method="POST">
                   <div class="form-group input-group">
-                      <input type="hidden"  name="id_provinsi" value="{{row.id}}">
-                    <input type="number" class="form-control" name="id" placeholder="ID Provinsi" value="{{row.id}}">
+                      <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="number" class="form-control" name="id" placeholder="ID Provinsi" value="{{row.id}}" disabled>
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-sort-numeric-up"></span>

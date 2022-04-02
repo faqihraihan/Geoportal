@@ -171,13 +171,13 @@
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_komoditi') }}" class="nav-link {{ input_data_komoditi_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Komoditas</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_bibit') }}" class="nav-link {{ input_data_bibit_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Jenis Bibit</p>
                 </a>
@@ -200,7 +200,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_gapoktan') }}" class="nav-link {{ input_data_gapoktan_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Gapoktan</p>
                 </a>

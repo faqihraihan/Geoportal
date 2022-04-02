@@ -15,13 +15,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Kabupaten</h1>
+            <h1 class="m-0">Data Gapoktan</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
               <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
-              <li class="breadcrumb-item active">Data Kabupaten</li>
+              <li class="breadcrumb-item active">Data Gapoktan</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Table Kabupaten</h3>
+                <h3 class="card-title">Tabel Data Gapoktan</h3>
                 <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
@@ -60,19 +60,25 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>ID Kabupaten</th>
-                      <th>Nama Kabupaten</th>
+                      <th>Desa</th>
+                      <th>Nama Gapoktan</th>
+                      <th>Alamat</th>
+                      <th>Telepon</th>
+                      <th>Tahun Terbentuk</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for row in kabupaten %}
+                    {% for row in gapoktan %}
                       <tr>
-                        <td>{{row.id}}</td>
+                        <td>{{row.desa.nama}}</td>
                         <td>{{row.nama}}</td>
+                        <td>{{row.alamat}}</td>
+                        <td>{{row.telepon}}</td>
+                        <td>{{row.tahun_terbentuk}}</td>
                         <td>
-                          <a class="edit-input-data-btn" href="/input-data/data-kabupaten/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-kabupaten/delete/{{row.id}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-gapoktan/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-gapoktan/delete/{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -94,27 +100,25 @@
     <!-- /.content -->
   </div>
 
-  <!-- Modal Edit Kabupaten-->
-  {% for row in kabupaten %}
+  <!-- Modal Edit Gapoktan-->
+  {% for row in gapoktan %}
     <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Kabupaten</h4>
+              <h4 class="modal-title">Ubah Data Gapoktan</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_kabupaten_update') }}" method="POST">
+              <form action="{{ url_for('main.input_data_gapoktan_update') }}" method="POST">
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="provinsi" placeholder="Nama Provinsi" value="{{row.provinsi.nama}}" disabled>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="bi bi-geo-alt"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                    <input type="hidden"  name="id_kabupaten" value="{{row.id}}">
-                  <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" value="{{row.id}}" disabled>
+                  <select name="provinsi" id="prov-edit-response" class="form-control add" required> 
+                    <option value="{{ row.desa.kecamatan.kabupaten.provinsi.id }}" selected="selected" hidden="hidden">
+                      {{row.desa.kecamatan.kabupaten.provinsi.nama}}
+                    </option> 
+                    {% for row in provinsi %} 
+                      <option value="{{ row.id }}">{{ row.nama }}</option>
+                    {% endfor %}
+                  </select>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-sort-numeric-up"></span>
@@ -122,7 +126,43 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" value="{{row.nama}}">
+                  <select name="kabupaten" class="form-control add" id="kab-edit-response" required> 
+                    <option value="{{ row.desa.kecamatan.kabupaten.id }}" selected="selected" hidden="hidden">
+                      {{row.desa.kecamatan.kabupaten.nama}}
+                    </option> 
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <select name="kabupaten" class="form-control add" id="kec-edit-response" required> 
+                    <option value="{{ row.desa.kecamatan.id }}" selected="selected" hidden="hidden">
+                      {{row.desa.kecamatan.nama}}
+                    </option> 
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <select name="kabupaten" class="form-control add" id="desa-edit-response" required> 
+                    <option value="{{ row.desa.id }}" selected="selected" hidden="hidden">
+                      {{row.desa.nama}}
+                    </option> 
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="bi bi-geo-alt"></span>
@@ -140,20 +180,20 @@
     </div>
   {% endfor %}
               
-  <!-- Modal Add Kabupaten-->
+  <!-- Modal Add Gapoktan-->
   <div id="mymodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Kabupaten</h4>
+            <h4 class="modal-title">Tambah Gapoktan</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_kabupaten_add')}}" method="POST">
+            <form action="{{url_for('main.input_data_gapoktan_add')}}" method="POST">
               <div class="form-group input-group">
-                <select name="provinsi" class="form-control add" required> 
+                <select name="provinsi" id="prov-add-response" class="form-control add" required> 
                   <option value="" disabled selected hidden>Provinsi</option>  
                   {% for row in provinsi %} 
-                    <option value="{{ row.id }}">{{ row.nama }}</option>
+                    <option value="{{ row.id }}">{{ row.id }} | {{ row.nama }}</option>
                   {% endfor %}
                 </select>
                 <div class="input-group-append">
@@ -163,7 +203,9 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" required>
+                <select name="kabupaten" class="form-control add" id="kab-add-response" required> 
+                  <option value="" disabled selected hidden>Kabupaten</option>  
+                </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -171,7 +213,51 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" required>
+                <select name="kecamatan" class="form-control add" id="kec-add-response" required> 
+                  <option value="" disabled selected hidden>Kecamatan</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div> 
+              </div>   
+              <div class="form-group input-group">
+                <select name="desa" class="form-control add" id="desa-add-response" required> 
+                  <option value="" disabled selected hidden>Desa</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>   
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="nama" placeholder="Nama Gapoktan" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="alamat" placeholder="Alamat Gapoktan" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="telepon" placeholder="Nomor Telepon" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="tahun_terbentuk" placeholder="Tahun Terbentuk" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="bi bi-geo-alt"></span>
