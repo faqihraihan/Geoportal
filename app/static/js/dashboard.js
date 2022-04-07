@@ -3112,4 +3112,36 @@
     $('#kec-edit-response').html(data);
     $('#kec-edit-response').append(data.htmlresponse);
   }
+
+  $('#kec-add-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-desa/live-search",
+      data: {
+          'kecamatan_response' : $('#kec-add-response').val()
+      },
+      success: searchKecAddSuccess,
+    });
+  });
+
+  function searchKecAddSuccess(data){
+    $('#desa-add-response').html(data);
+    $('#desa-add-response').append(data.htmlresponse);
+  }
+
+  $('#kec-edit-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-desa/live-search",
+      data: {
+          'kecamatan_response' : $('#kec-edit-response').val()
+      },
+      success: searchKecEditSuccess,
+    });
+  });
+
+  function searchKecEditSuccess(data){
+    $('#desa-edit-response').html(data);
+    $('#desa-edit-response').append(data.htmlresponse);
+  }
 }));

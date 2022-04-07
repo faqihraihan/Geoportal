@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 18 Mar 2022 pada 06.12
+-- Waktu pembuatan: 07 Apr 2022 pada 17.00
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -29,48 +29,49 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `provinsi` (
   `id` int(11) NOT NULL,
-  `nama` varchar(200) DEFAULT NULL
+  `nama` varchar(200) DEFAULT NULL,
+  `waktu` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `provinsi`
 --
 
-INSERT INTO `provinsi` (`id`, `nama`) VALUES
-(11, 'Aceh\r'),
-(12, 'Sumatera Utara\r'),
-(13, 'Sumatera Barat\r'),
-(14, 'Riau\r'),
-(15, 'Jambi\r'),
-(16, 'Sumatera Selatan\r'),
-(17, 'Bengkulu\r'),
-(18, 'Lampung\r'),
-(19, 'Kep. Bangka Belitung\r'),
-(21, 'Kep. Riau\r'),
-(31, 'Dki Jakarta\r'),
-(32, 'Jawa Barat\r'),
-(33, 'Jawa Tengah\r'),
-(34, 'Di Yogyakarta\r'),
-(35, 'Jawa Timur\r'),
-(36, 'Banten\r'),
-(51, 'Bali\r'),
-(52, 'Nusa Tenggara Barat\r'),
-(53, 'Nusa Tenggara Timur\r'),
-(61, 'Kalimantan Barat\r'),
-(62, 'Kalimantan Tengah\r'),
-(63, 'Kalimantan Selatan\r'),
-(64, 'Kalimantan Timur\r'),
-(65, 'Kalimantan Utara\r'),
-(71, 'Sulawesi Utara\r'),
-(72, 'Sulawesi Tengah\r'),
-(73, 'Sulawesi Selatan\r'),
-(74, 'Sulawesi Tenggara\r'),
-(75, 'Gorontalo\r'),
-(76, 'Sulawesi Barat\r'),
-(81, 'Maluku\r'),
-(82, 'Maluku Utara\r'),
-(91, 'Papua\r'),
-(92, 'Papua Barat\r');
+INSERT INTO `provinsi` (`id`, `nama`, `waktu`) VALUES
+(11, 'Aceh', '2022-04-03 15:10:35'),
+(12, 'Sumatera Utara', '2022-04-03 15:10:35'),
+(13, 'Sumatera Barat', '2022-04-03 15:10:35'),
+(14, 'Riau', '2022-04-03 15:10:35'),
+(15, 'Jambi', '2022-04-03 15:10:35'),
+(16, 'Sumatera Selatan', '2022-04-03 15:10:35'),
+(17, 'Bengkulu', '2022-04-03 15:10:35'),
+(18, 'Lampung', '2022-04-03 15:10:35'),
+(19, 'Kep. Bangka Belitung', '2022-04-03 15:10:35'),
+(21, 'Kep. Riau', '2022-04-03 15:10:35'),
+(31, 'DKI Jakarta', '2022-04-03 15:10:35'),
+(32, 'Jawa Barat', '2022-04-03 15:10:35'),
+(33, 'Jawa Tengah', '2022-04-03 15:10:35'),
+(34, 'DI Yogyakarta', '2022-04-03 15:10:35'),
+(35, 'Jawa Timur', '2022-04-03 15:10:35'),
+(36, 'Banten', '2022-04-03 15:10:35'),
+(51, 'Bali', '2022-04-03 15:10:35'),
+(52, 'Nusa Tenggara Barat', '2022-04-03 15:10:35'),
+(53, 'Nusa Tenggara Timur', '2022-04-03 15:10:35'),
+(61, 'Kalimantan Barat', '2022-04-03 15:10:35'),
+(62, 'Kalimantan Tengah', '2022-04-03 15:10:35'),
+(63, 'Kalimantan Selatan', '2022-04-03 15:10:35'),
+(64, 'Kalimantan Timur', '2022-04-03 15:10:35'),
+(65, 'Kalimantan Utara', '2022-04-03 15:10:35'),
+(71, 'Sulawesi Utara', '2022-04-03 15:10:35'),
+(72, 'Sulawesi Tengah', '2022-04-03 15:10:35'),
+(73, 'Sulawesi Selatan', '2022-04-03 15:10:35'),
+(74, 'Sulawesi Tenggara', '2022-04-03 15:10:35'),
+(75, 'Gorontalo', '2022-04-03 15:10:35'),
+(76, 'Sulawesi Barat', '2022-04-03 15:10:35'),
+(81, 'Maluku', '2022-04-03 15:10:35'),
+(82, 'Maluku Utara', '2022-04-03 15:10:35'),
+(91, 'Papua', '2022-04-03 15:10:35'),
+(92, 'Papua Barat', '2022-04-03 15:10:35');
 
 --
 -- Indexes for dumped tables

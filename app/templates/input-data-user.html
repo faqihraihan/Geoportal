@@ -62,7 +62,7 @@
                     <tr>
                       <th>Nama</th>
                       <th>Email</th>
-                      <th>No. Hp</th>
+                      <th>Telp/No. Hp</th>
                       <th>Level</th>
                       <th>Action</th>
                     </tr>
@@ -72,7 +72,7 @@
                       <tr>
                         <td>{{row.nama}}</td>
                         <td>{{row.email}}</td>
-                        <td>{{row.nohp}}</td>
+                        <td>{{row.telp}}</td>
                         <td>
                           {% if row.lvl==1 %}Admin{% endif %}
                           {% if row.lvl==2 %}Operator Geospasial{% endif %}
@@ -82,7 +82,7 @@
                         </td>
                         <td>
                           <a class="edit-input-data-btn" href="/input-data/data-user/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-user/delete/{{row.id}}">Hapus</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-user/delete/{{row.id}}" data-toggle="modal" data-target="#modaldelete{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -115,8 +115,8 @@
             <div class="modal-body card-body register-card-body">
               <form action="{{ url_for('auth.input_data_user_update') }}" method="POST">
                   <div class="form-group input-group">
-                      <input type="hidden"  name="id" value="{{row.id}}">
-                    <input type="text" class="form-control" name="name" placeholder="Full name" value="{{row.nama}}">
+                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="text" class="form-control" name="name" placeholder="Full Name" value="{{row.nama}}">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-user"></span>
@@ -124,7 +124,7 @@
                     </div>
                   </div>
                   <div class="form-group input-group">
-                    <input type="text" class="form-control" name="nohp" placeholder="No. Hp" value="{{row.nohp}}">
+                    <input type="text" class="form-control" name="telp" placeholder="Telp/No. Hp" value="{{row.telp}}">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="fas fa-address-book"></span>
@@ -141,7 +141,7 @@
                   </div>
                   <div class="form-group input-group">
                     <select name="level" class="form-control" required>
-                      <option value="" selected="selected" hidden="hidden">
+                      <option value="{{row.lvl}}" selected="selected" hidden="hidden">
                         {% if row.lvl==1 %}Admin{% endif %}
                         {% if row.lvl==2 %}Operator Geospasial{% endif %}
                         {% if row.lvl==3 %}Operator Non-Geospasial{% endif %}
@@ -161,7 +161,7 @@
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Ubah</button>
+                    <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                   </div>
               </form>
@@ -181,7 +181,7 @@
           <div class="modal-body card-body register-card-body">
             <form action="{{url_for('auth.input_data_user_add')}}" method="POST">
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="name" placeholder="Full name" required>
+                  <input type="text" class="form-control" name="name" placeholder="Full Name" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-user"></span>
@@ -189,7 +189,7 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="number" class="form-control" name="nohp" placeholder="No. Hp" required>
+                  <input type="number" class="form-control" name="telp" placeholder="Telp/No. Hp" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-address-book"></span>
@@ -213,7 +213,7 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="password" class="form-control" placeholder="Retype password" name="repassword" required>
+                  <input type="password" class="form-control" placeholder="Retype Password" name="repassword" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -236,7 +236,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button class="btn btn-primary" type="submit">Tambah</button>
+                  <button class="btn btn-primary btn-success" type="submit">Tambah</button>
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 </div>
             </form>
@@ -244,6 +244,71 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Delete User-->
+  {% for row in user %}
+    <div id="modaldelete{{row.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Hapus Data User</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <h6><b>Full Name</b></h6>
+              <div class="form-group input-group">
+                <input type="hidden"  name="id" value="{{row.id}}">
+                <input type="text" class="form-control" value="{{row.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Telp/No. Hp</b></h6>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" value="{{row.telp}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-address-book"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Email</b></h6>
+              <div class="form-group input-group">
+                <input type="email" class="form-control" value="{{row.email}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Level</b></h6>
+              <div class="form-group input-group mb-3">
+                <input type="text" class="form-control"
+                  {% if row.lvl==1 %}value="Admin"{% endif %}
+                  {% if row.lvl==2 %}value="Operator Geospasial"{% endif %}
+                  {% if row.lvl==3 %}value="Operator Non-Geospasial"{% endif %}
+                  {% if row.lvl==4 %}value="Super User"{% endif %}
+                  {% if row.lvl==5 %}value="User"{% endif %}
+                disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('auth.input_data_user_delete') }}" method="POST">
+                  <div class="modal-footer">
+                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}
 
 {% block scripts %}

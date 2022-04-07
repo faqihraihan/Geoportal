@@ -60,8 +60,8 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>ID Kabupaten</th>
-                      <th>Nama Kabupaten</th>
+                      <th>ID</th>
+                      <th>Nama Kabupaten/Kota</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -72,7 +72,7 @@
                         <td>{{row.nama}}</td>
                         <td>
                           <a class="edit-input-data-btn" href="/input-data/data-kabupaten/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-kabupaten/delete/{{row.id}}">Hapus</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-kabupaten/delete/{{row.id}}" data-toggle="modal" data-target="#modaldelete{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -100,36 +100,13 @@
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Kabupaten</h4>
+              <h4 class="modal-title">Ubah Data Kabupaten/Kota</h4>
             </div>
             <div class="modal-body card-body register-card-body">
               <form action="{{ url_for('main.input_data_kabupaten_update') }}" method="POST">
                 <div class="form-group input-group">
-                  <select name="provinsi" class="form-control" required>
-                    <option value="{{ row.provinsi.id }}" selected="selected" hidden="hidden">
-                      {{row.provinsi.nama}}
-                    </option> 
-                    {% for row in provinsi %} 
-                      <option value="{{ row.id }}">{{ row.nama }}</option>
-                    {% endfor %}
-                  </select>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                    <input type="hidden"  name="id_kabupaten" value="{{row.id}}">
-                  <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" value="{{row.id}}">
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" value="{{row.nama}}">
+                  <input type="hidden"  name="id_kabupaten" value="{{row.id}}">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten/Kota" value="{{row.nama}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="bi bi-geo-alt"></span>
@@ -137,7 +114,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button class="btn btn-primary" type="submit">Ubah</button>
+                  <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 </div>
               </form>
@@ -152,7 +129,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Kabupaten</h4>
+            <h4 class="modal-title">Tambah Kabupaten/Kota</h4>
           </div>
           <div class="modal-body card-body register-card-body">
             <form action="{{url_for('main.input_data_kabupaten_add')}}" method="POST">
@@ -160,17 +137,17 @@
                 <select name="provinsi" class="form-control add" required> 
                   <option value="" disabled selected hidden>Provinsi</option>  
                   {% for row in provinsi %} 
-                    <option value="{{ row.id }}">{{ row.nama }}</option>
+                    <option value="{{ row.id }}">{{ row.id }} | {{ row.nama }}</option>
                   {% endfor %}
                 </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
-                    <span class="fas fa-sort-numeric-up"></span>
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="number" class="form-control" name="id" placeholder="ID Kabupaten" required>
+                <input type="number" class="form-control" name="id" placeholder="ID Kabupaten/Kota" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -178,7 +155,7 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten" required>
+                <input type="text" class="form-control" name="nama" placeholder="Nama Kabupaten/Kota" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="bi bi-geo-alt"></span>
@@ -186,7 +163,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">Tambah</button>
+                <button class="btn btn-primary btn-success" type="submit">Tambah</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
               </div>
             </form>
@@ -194,6 +171,46 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Delete Kabupaten-->
+  {% for row in kabupaten %}
+    <div id="modaldelete{{row.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Hapus Data Kabupaten/Kota</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <h6><b>ID</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.id}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Nama Kabupaten/Kota</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_kabupaten_delete') }}" method="POST">
+                  <div class="modal-footer">
+                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}
 
 {% block scripts %}

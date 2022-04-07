@@ -53,16 +53,16 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Data Peta Desa</h3>
-                <a class="add-user-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
+                <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>ID Desa</th>
+                      <th>ID</th>
                       <th>Nama Desa</th>
-                      <th>JSON</th>
+                      <th>Peta</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -71,10 +71,12 @@
                       <tr>
                         <td>{{row.id}}</td>
                         <td>{{row.nama}}</td>
-                        <td>{{row.json}}</td>
                         <td>
-                          <a class="edit-user-btn" href="/input-data/data-desa/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-user-btn" href="/input-data/data-desa/delete/{{row.id}}">Hapus</a>
+                          <a class="view-input-data-btn" href="/gis/{{row.id}}">Lihat</a>
+                        </td>
+                        <td>
+                          <a class="edit-input-data-btn" href="/input-data/peta-desa/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/peta-desa/delete/{{row.id}}" data-toggle="modal" data-target="#modaldelete{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -102,20 +104,12 @@
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Desa</h4>
+              <h4 class="modal-title">Ubah Data Peta Desa</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_peta_desa') }}" method="POST">
+              <form action="{{ url_for('main.input_data_peta_desa_update') }}" enctype=multipart/form-data method="POST">
                   <div class="form-group input-group">
-                      <input type="hidden"  name="id_desa" value="{{row.id}}">
-                    <input type="number" class="form-control" name="id" placeholder="ID Desa" value="{{row.id}}">
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="fas fa-sort-numeric-up"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group input-group">
+                    <input type="hidden"  name="id_desa" value="{{row.id}}">
                     <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
                     <div class="input-group-append">
                       <div class="input-group-text">
@@ -123,8 +117,16 @@
                       </div>
                     </div>
                   </div>
+                  <div class="form-group input-group">
+                    <input type="file" class="form-control" name="json" placeholder="JSON" value="{{row.json}}">
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="bi bi-geo-alt"></span>
+                      </div>
+                    </div>
+                  </div>
                   <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Ubah</button>
+                    <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                   </div>
               </form>
@@ -139,35 +141,110 @@
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Desa</h4>
+            <h4 class="modal-title">Tambah Peta Desa</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_peta_desa')}}" method="POST">
-                <div class="form-group input-group">
-                  <input type="number" class="form-control" name="id" placeholder="ID Desa" required>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
-                    </div>
+            <form action="{{url_for('main.input_data_peta_desa_add')}}" enctype=multipart/form-data method="POST">
+              <div class="form-group input-group">
+                <select name="provinsi" id="prov-add-response" class="form-control add" required> 
+                  <option value="" disabled selected hidden>Provinsi</option>  
+                  {% for row in provinsi %} 
+                    <option value="{{ row.id }}">{{ row.id }} | {{ row.nama }}</option>
+                  {% endfor %}
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
-                <div class="form-group input-group">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Desa" required>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="bi bi-geo-alt"></span>
-                    </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="kabupaten" class="form-control add" id="kab-add-response" required> 
+                  <option value="" disabled selected hidden>Kabupaten</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button class="btn btn-primary" type="submit">Tambah</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              </div>
+              <div class="form-group input-group">
+                <select name="kecamatan" class="form-control add" id="kec-add-response" required> 
+                  <option value="" disabled selected hidden>Kecamatan</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
                 </div>
+              </div> 
+              <div class="form-group input-group">
+                <select name="desa" class="form-control add" id="desa-add-response" required> 
+                  <option value="" disabled selected hidden>Desa</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="file" class="form-control" name="json" placeholder="JSON">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary btn-success" type="submit">Tambah</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              </div>
             </form>
           </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal Delete Peta Desa-->
+  {% for row in peta_desa %}
+    <div id="modaldelete{{row.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Hapus Data Peta Desa</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <h6><b>ID</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.id}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Nama Desa</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_peta_desa_delete') }}" method="POST">
+                  <div class="modal-footer">
+                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}
 
 {% block scripts %}

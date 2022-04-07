@@ -12513,10 +12513,10 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 .brand-link .brand-image {
   float: left;
   line-height: .8;
-  margin-left: .8rem;
+  margin-left: .7rem;
   margin-right: .5rem;
-  margin-top: -3px;
-  max-height: 33px;
+  margin-top: 2px;
+  max-height: 29px;
   width: auto;
 }
 
@@ -53122,6 +53122,15 @@ input[type=number] {
   background: #dc3545;
 }
 
+.table .view-input-data-btn{
+  padding: 5px 10px;
+  margin-right: 3px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 12px;
+  background: #28a745;
+}
+
 /* Form DataTable User */
 .modal-body .modal-footer {
   padding: 0;
@@ -53130,6 +53139,22 @@ input[type=number] {
 
 .modal-body .modal-footer .btn-secondary{
   background-color: rgb(52, 58, 64);
+}
+
+.modal-body .modal-footer .btn-primary.btn-success{
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.modal-body .modal-footer .btn-primary.btn-wrn{
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #212529;
+}
+
+.modal-body .modal-footer .btn-primary.btn-dgr{
+  background-color: #dc3545;
+  border-color: #dc3545;
 }
 
 select.form-control.add:invalid{

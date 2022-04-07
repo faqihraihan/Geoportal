@@ -8,7 +8,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="../static/img/logo-unhas.png" rel="icon">
+  <link href="../static/img/favicon.png" rel="icon">
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -40,7 +40,7 @@
 
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="../static/img/logo-unhas.png" alt="Logo Universitas Hasanuddin" height="60">
+    <img class="animation__shake" src="../static/img/logo-stp-dark.png" alt="Science Techno Park" height="60">
     </div>
 
     <!-- Navbar -->
@@ -92,7 +92,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ url_for('main.home') }}" class="brand-link">
-        <img src="../static/img/logo-unhas.png" alt="Logo Unhas" class="brand-image" style="opacity: .8">
+        <img src="../static/img/logo-stp.png" alt="Science Techno Park" class="brand-image" style="opacity: .8">
         <span class="brand-text font-weight-light">Science Techno Park</span>
     </a>
 
@@ -130,7 +130,11 @@
             <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
             <li class="nav-item">
-            <a href="{{ url_for('main.input_data') }}" class="nav-link {{ input_data_navbar }}">
+            {% if input_data_navbar %}
+            <a href="#" class="nav-link {{ input_data_navbar }}">
+            {% else %}
+            <a href="{{ url_for('main.input_data') }}" class="nav-link">
+            {% endif %}
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                 Input Data
@@ -155,7 +159,7 @@
                 <li class="nav-item">
                 <a href="{{ url_for('main.input_data_kabupaten') }}" class="nav-link {{ input_data_kabupaten_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Kabupaten</p>
+                    <p>Kabupaten/Kota</p>
                 </a>
                 </li>
                 <li class="nav-item">
@@ -169,23 +173,16 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>Desa</p>
                 </a>
-                </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_bibit') }}" class="nav-link {{ input_data_bibit_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Komoditas</p>
+                    <p>Bibit</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_pupuk') }}" class="nav-link {{ input_data_pupuk_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Jenis Bibit</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Jenis Pupuk</p>
+                    <p>Pupuk</p>
                 </a>
                 </li>
             </ul>
@@ -200,7 +197,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_gapoktan') }}" class="nav-link {{ input_data_gapoktan_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Gapoktan</p>
                 </a>

@@ -60,7 +60,7 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>ID Desa</th>
+                      <th>ID</th>
                       <th>Nama Desa</th>
                       <th>Action</th>
                     </tr>
@@ -72,7 +72,7 @@
                         <td>{{row.nama}}</td>
                         <td>
                           <a class="edit-input-data-btn" href="/input-data/data-desa/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-desa/delete/{{row.id}}">Hapus</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-desa/delete/{{row.id}}" data-toggle="modal" data-target="#modaldelete{{row.id}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -105,54 +105,7 @@
             <div class="modal-body card-body register-card-body">
               <form action="{{ url_for('main.input_data_desa_update') }}" method="POST">
                 <div class="form-group input-group">
-                  <select name="provinsi" id="prov-edit-response" class="form-control add" required> 
-                    <option value="{{ row.kecamatan.kabupaten.provinsi.id }}" selected="selected" hidden="hidden">
-                      {{row.kecamatan.kabupaten.provinsi.nama}}
-                    </option> 
-                    {% for row in provinsi %} 
-                      <option value="{{ row.id }}">{{ row.nama }}</option>
-                    {% endfor %}
-                  </select>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                  <select name="kabupaten" class="form-control add" id="kab-edit-response" required> 
-                    <option value="{{ row.kecamatan.kabupaten.id }}" selected="selected" hidden="hidden">
-                      {{row.kecamatan.kabupaten.nama}}
-                    </option> 
-                  </select>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                  <select name="kabupaten" class="form-control add" id="kec-edit-response" required> 
-                    <option value="{{ row.kecamatan.id }}" selected="selected" hidden="hidden">
-                      {{row.kecamatan.nama}}
-                    </option> 
-                  </select>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                    <input type="hidden"  name="id_desa" value="{{row.id}}">
-                  <input type="number" class="form-control" name="id" placeholder="ID Desa" value="{{row.id_desa}}">
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-sort-numeric-up"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
+                  <input type="hidden"  name="id_desa" value="{{row.id}}">
                   <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
@@ -161,7 +114,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button class="btn btn-primary" type="submit">Ubah</button>
+                  <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 </div>
               </form>
@@ -184,12 +137,12 @@
                 <select name="provinsi" id="prov-add-response" class="form-control add" required> 
                   <option value="" disabled selected hidden>Provinsi</option>  
                   {% for row in provinsi %} 
-                    <option value="{{ row.id }}">{{ row.nama }}</option>
+                    <option value="{{ row.id }}">{{ row.id }} | {{ row.nama }}</option>
                   {% endfor %}
                 </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
-                    <span class="fas fa-sort-numeric-up"></span>
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
               </div>
@@ -199,7 +152,7 @@
                 </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
-                    <span class="fas fa-sort-numeric-up"></span>
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
               </div>
@@ -209,7 +162,7 @@
                 </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
-                    <span class="fas fa-sort-numeric-up"></span>
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
               </div>   
@@ -230,7 +183,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">Tambah</button>
+                <button class="btn btn-primary btn-success" type="submit">Tambah</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
               </div>
             </form>
@@ -238,6 +191,46 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Delete Desa-->
+  {% for row in desa %}
+    <div id="modaldelete{{row.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Hapus Data Desa</h4>
+            </div>
+            <div class="modal-body card-body register-card-body">
+              <h6><b>ID</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.id}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Nama Desa</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_desa_delete') }}" method="POST">
+                  <div class="modal-footer">
+                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 {% endblock %}
 
 {% block scripts %}
