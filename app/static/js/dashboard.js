@@ -3065,22 +3065,6 @@
     $('#kab-add-response').append(data.htmlresponse);
   }
 
-  $('#prov-edit-response').click(function() {
-    $.ajax({
-      type: "POST",
-      url: "/input-data/data-kabupaten/live-search",
-      data: {
-          'provinsi_response' : $('#prov-edit-response').val()
-      },
-      success: searchProvEditSuccess,
-    });
-  });
-
-  function searchProvEditSuccess(data){
-    $('#kab-edit-response').html(data);
-    $('#kab-edit-response').append(data.htmlresponse);
-  }
-
   $('#kab-add-response').click(function() {
     $.ajax({
       type: "POST",
@@ -3095,22 +3079,6 @@
   function searchKabAddSuccess(data){
     $('#kec-add-response').html(data);
     $('#kec-add-response').append(data.htmlresponse);
-  }
-
-  $('#kab-edit-response').click(function() {
-    $.ajax({
-      type: "POST",
-      url: "/input-data/data-kecamatan/live-search",
-      data: {
-          'kabupaten_response' : $('#kab-edit-response').val()
-      },
-      success: searchKabEditSuccess,
-    });
-  });
-
-  function searchKabEditSuccess(data){
-    $('#kec-edit-response').html(data);
-    $('#kec-edit-response').append(data.htmlresponse);
   }
 
   $('#kec-add-response').click(function() {
@@ -3129,19 +3097,67 @@
     $('#desa-add-response').append(data.htmlresponse);
   }
 
-  $('#kec-edit-response').click(function() {
+  $('#desa-add-response').click(function() {
     $.ajax({
       type: "POST",
-      url: "/input-data/data-desa/live-search",
+      url: "/input-data/data-kelompok-tani/live-search",
       data: {
-          'kecamatan_response' : $('#kec-edit-response').val()
+          'desa_response' : $('#desa-add-response').val()
       },
-      success: searchKecEditSuccess,
+      success: searchDesaAddSuccess,
     });
   });
 
-  function searchKecEditSuccess(data){
-    $('#desa-edit-response').html(data);
-    $('#desa-edit-response').append(data.htmlresponse);
+  function searchDesaAddSuccess(data){
+    $('#poktan-add-response').html(data);
+    $('#poktan-add-response').append(data.htmlresponse);
+  }
+
+  $('#poktan-add-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-individu-petani/live-search",
+      data: {
+          'poktan_response' : $('#poktan-add-response').val()
+      },
+      success: searchPetaniAddSuccess,
+    });
+  });
+
+  function searchPetaniAddSuccess(data){
+    $('#petani-add-response').html(data);
+    $('#petani-add-response').append(data.htmlresponse);
+  }
+
+  $('#petani-add-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-individu-lahan/live-search",
+      data: {
+          'petani_response' : $('#petani-add-response').val()
+      },
+      success: searchLahanAddSuccess,
+    });
+  });
+
+  function searchLahanAddSuccess(data){
+    $('#lahan-add-response').html(data);
+    $('#lahan-add-response').append(data.htmlresponse);
+  }
+
+  $('#lahan-add-response').click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/input-data/data-log-tanam/live-search",
+      data: {
+          'lahan_response' : $('#lahan-add-response').val()
+      },
+      success: searchLogTanamAddSuccess,
+    });
+  });
+
+  function searchLogTanamAddSuccess(data){
+    $('#log-tanam-add-response').html(data);
+    $('#log-tanam-add-response').append(data.htmlresponse);
   }
 }));

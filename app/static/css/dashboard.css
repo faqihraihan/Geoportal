@@ -12513,7 +12513,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 .brand-link .brand-image {
   float: left;
   line-height: .8;
-  margin-left: .7rem;
+  margin-left: .55rem;
   margin-right: .5rem;
   margin-top: 2px;
   max-height: 29px;
@@ -12668,7 +12668,7 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
   padding-top: 6px;
 }
 
-.nav-item .nav-link .profile {
+.nav-item .nav-link .profile, .img-petani {
   height: 30px;
   margin-right: 18px;
 }
@@ -53131,7 +53131,7 @@ input[type=number] {
   background: #28a745;
 }
 
-/* Form DataTable User */
+/* Input Data */
 .modal-body .modal-footer {
   padding: 0;
   border-top: 0;
@@ -53179,6 +53179,10 @@ select.form-control option{
   text-shadow: none;
   color: #fff;
   top: 100px;
+}
+
+.img-petani, .img-lahan {
+  height: 30px;
 }
 
 /* Profil */

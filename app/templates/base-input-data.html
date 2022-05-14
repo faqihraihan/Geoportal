@@ -63,19 +63,19 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
         <a class="nav-link nav-profile" data-toggle="dropdown" href="#">
-            {% if not img %}
+            {% if not foto %}
             <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
             {% else %}
-            <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+            <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
             {% endif %}
             <i class="bi bi-chevron-down iprofile"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <div class="div-profile">
-                {% if not img %}
+                {% if not foto %}
                 <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
                 {% else %}
-                <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+                <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
                 {% endif %}
                 <span class="profile-list">{{name}}</span>
                 <a class="profile-btn" href="{{ url_for('main.profil_me') }}">Profil</a>
@@ -101,10 +101,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-            {% if not img %}
+            {% if not foto %}
             <img src="../static/img/user.png" class="img-circle elevation-2" alt="User Image">
             {% else %}
-            <img src="data:;base64,{{ img }}" class="img-circle elevation-2" alt="User Image">
+            <img src="data:;base64,{{ foto }}" class="img-circle elevation-2" alt="User Image">
             {% endif %}
         </div>
         <div class="info">
@@ -145,7 +145,7 @@
             <a href="" class="nav-link {{ input_data_master_navbar }}">
                 <i class="nav-icon fas fa-chart-pie"></i>
                 <p>
-                Data Master
+                Data Wilayah
                 <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
@@ -173,17 +173,6 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>Desa</p>
                 </a>
-                <li class="nav-item">
-                <a href="{{ url_for('main.input_data_bibit') }}" class="nav-link {{ input_data_bibit_navbar }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Bibit</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="{{ url_for('main.input_data_pupuk') }}" class="nav-link {{ input_data_pupuk_navbar }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pupuk</p>
-                </a>
                 </li>
             </ul>
             </li>
@@ -209,16 +198,75 @@
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_individu_petani') }}" class="nav-link {{ input_data_individu_petani_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Individu Petani</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('main.input_data_individu_lahan') }}" class="nav-link {{ input_data_individu_lahan_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Individu Lahan</p>
                 </a>
+                </li>
+                <li class="nav-item">
+                <a href="{{ url_for('main.input_data_komoditas') }}" class="nav-link {{ input_data_komoditas_navbar }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Komoditas</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a href="{{ url_for('main.input_data_pupuk') }}" class="nav-link {{ input_data_pupuk_navbar }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pupuk</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a href="{{ url_for('main.input_data_hama') }}" class="nav-link {{ input_data_hama_navbar }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Hama</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a href="{{ url_for('main.input_data_racun') }}" class="nav-link {{ input_data_racun_navbar }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Racun</p>
+                </a>
+                </li>
+                <li class="nav-item">
+                <a href="" class="nav-link {{ input_data_log_pertanian_navbar }}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                    Log
+                    <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{{ url_for('main.input_data_log_tanam') }}" class="nav-link {{ input_data_log_tanam_navbar }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Log Tanam</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url_for('main.input_data_log_pupuk_pertanian') }}" class="nav-link {{ input_data_log_pupuk_pertanian_navbar }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Detail Log Pupuk</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url_for('main.input_data_log_hama_pertanian') }}" class="nav-link {{ input_data_log_hama_pertanian_navbar }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Detail Log Hama</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url_for('main.input_data_log_racun_pertanian') }}" class="nav-link {{ input_data_log_racun_pertanian_navbar }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Detail Log Racun</p>
+                      </a>
+                    </li>
+                </ul>
                 </li>
             </ul>
             </li>
@@ -252,23 +300,6 @@
                 <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Coming Soon</p>
-                </a>
-                </li>
-            </ul>
-            </li>
-            <li class="nav-item">
-            <a href="" class="nav-link {{ input_data_geospasial_navbar }}">
-                <i class="nav-icon fas fa-atlas"></i>
-                <p>
-                Data Spasial
-                <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                <a href="{{ url_for('main.input_data_peta_desa') }}" class="nav-link {{ input_data_peta_desa }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Peta Desa</p>
                 </a>
                 </li>
             </ul>

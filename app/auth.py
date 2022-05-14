@@ -50,11 +50,11 @@ def signup_post():
 
     user = User.query.filter_by(email=email).first()
 
-    admin = User.query.filter_by(lvl='1').first()
+    admin = User.query.filter_by(level='1').first()
     if not admin:
-        lvl = "1"
+        level = "1"
     else:
-        lvl = "5"
+        level = "5"
 
     if user:
         flash('Email telah digunakan')
@@ -64,7 +64,7 @@ def signup_post():
         flash(u'Password berbeda', 'pass-error')
         return redirect(url_for('auth.signup'))
 
-    new_user = User(email=email, nama=name, telp=telp, password=generate_password_hash(password, method='sha256'), lvl=lvl)
+    new_user = User(email=email, nama=name, telp=telp, password=generate_password_hash(password, method='sha256'), level=level)
 
     db.session.add(new_user)
     db.session.commit()
@@ -83,11 +83,11 @@ def logout():
 @ login_required
 def input_data_user():
     image=None
-    if current_user.img:
-        image = base64.b64encode(current_user.img).decode('ascii')
+    if current_user.foto:
+        image = base64.b64encode(current_user.foto).decode('ascii')
     active = 'active'
     all_data = User.query.all()
-    return render_template("input-data-user.html", img=image, name=current_user.nama, level=current_user.lvl, input_data_user_navbar=active, user=all_data)
+    return render_template("input-data-user.html", foto=image, name=current_user.nama, level=current_user.level, input_data_user_navbar=active, user=all_data)
 
 
 @ auth.route("/input-data/data-user/add", methods=['POST'])
@@ -99,7 +99,7 @@ def input_data_user_add():
         telp = request.form['telp']
         password = request.form['password']
         repassword = request.form['repassword']
-        lvl = request.form['level']
+        level = request.form['level']
 
         user = User.query.filter_by(email=email).first()
 
@@ -111,7 +111,7 @@ def input_data_user_add():
             flash(u'Penambahan dibatalkan. Password berbeda', 'pass-error')
             return redirect(url_for('auth.input_data_user'))
 
-        add_Data = User(nama=nama, email=email, telp=telp, password=generate_password_hash(password, method='sha256'), lvl=lvl)
+        add_Data = User(nama=nama, email=email, telp=telp, password=generate_password_hash(password, method='sha256'), level=level)
 
         db.session.add(add_Data)
         db.session.commit()
@@ -128,7 +128,7 @@ def input_data_user_update():
         update.nama = request.form['name']
         update.email = request.form['email']
         update.telp = request.form['telp']
-        update.lvl = request.form['level']
+        update.level = request.form['level']
 
         db.session.commit()
         flash("Data berhasil diubah")
@@ -168,12 +168,14 @@ def update_data_profile_user():
 def update_pass_profile_user():
     if request.method == 'POST':
         update = User.query.get(request.form.get('id'))
-        update.password = request.form['password']
+        password = request.form['password']
 
         repassword = request.form['repassword']
-        if update.password != repassword:
+        if password != repassword:
             flash(u'Perubahan dibatalkan. Password berbeda', 'pass-error')
             return redirect(url_for('main.profil_me'))
+
+        update.password = generate_password_hash(password, method='sha256')
 
         db.session.commit()
         flash("Password berhasil diubah")
@@ -185,11 +187,11 @@ def update_pass_profile_user():
 @ login_required
 def update_foto_profile_user():
     if request.method == 'POST':
-        img = request.files['fp']
-        img = img.read()
+        foto = request.files['fp']
+        foto = foto.read()
 
         update = User.query.get(request.form.get('id'))
-        update.img = img
+        update.foto = foto
 
         db.session.commit()
 

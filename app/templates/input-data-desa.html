@@ -62,17 +62,21 @@
                     <tr>
                       <th>ID</th>
                       <th>Nama Desa</th>
+                      <th>Peta</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for row in desa %}
                       <tr>
-                        <td>{{row.id}}</td>
+                        <td>{{row.id_desa}}</td>
                         <td>{{row.nama}}</td>
                         <td>
-                          <a class="edit-input-data-btn" href="/input-data/data-desa/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-desa/delete/{{row.id}}" data-toggle="modal" data-target="#modaldelete{{row.id}}">Hapus</a>
+                          <a class="view-input-data-btn" href="/gis/{{row.id_desa}}">Lihat</a>
+                        </td>
+                        <td>
+                          <a class="edit-input-data-btn" href="/input-data/data-desa/update/{{row.id_desa}}" data-toggle="modal" data-target="#modaledit{{row.id_desa}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-desa/delete/{{row.id_desa}}" data-toggle="modal" data-target="#modaldelete{{row.id_desa}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -96,17 +100,26 @@
 
   <!-- Modal Edit Desa-->
   {% for row in desa %}
-    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+    <div id="modaledit{{row.id_desa}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Ubah Data Desa</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_desa_update') }}" method="POST">
+              <form action="{{ url_for('main.input_data_desa_update') }}" enctype=multipart/form-data method="POST">
+                <div class="form-group input-group">
+                  <input type="hidden"  name="id_desa" value="{{row.id_desa}}">
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-group input-group">
                   <input type="hidden"  name="id_desa" value="{{row.id}}">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
+                  <input type="file" class="form-control" name="json" placeholder="JSON" value="{{row.json}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="bi bi-geo-alt"></span>
@@ -132,12 +145,12 @@
             <h4 class="modal-title">Tambah Desa</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_desa_add')}}" method="POST">
+            <form action="{{url_for('main.input_data_desa_add')}}" enctype=multipart/form-data method="POST">
               <div class="form-group input-group">
                 <select name="provinsi" id="prov-add-response" class="form-control add" required> 
                   <option value="" disabled selected hidden>Provinsi</option>  
                   {% for row in provinsi %} 
-                    <option value="{{ row.id }}">{{ row.id }} | {{ row.nama }}</option>
+                    <option value="{{ row.id_prov }}">{{ row.id_prov }} | {{ row.nama }}</option>
                   {% endfor %}
                 </select>
                 <div class="input-group-append">
@@ -167,7 +180,7 @@
                 </div>
               </div>   
               <div class="form-group input-group">
-                <input type="number" class="form-control" name="id" placeholder="ID Desa" required>
+                <input type="number" class="form-control" name="id_desa" placeholder="ID Desa" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -176,6 +189,14 @@
               </div>
               <div class="form-group input-group">
                 <input type="text" class="form-control" name="nama" placeholder="Nama Desa" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="file" class="form-control" name="json" placeholder="JSON">
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="bi bi-geo-alt"></span>
@@ -194,7 +215,7 @@
 
   <!-- Modal Delete Desa-->
   {% for row in desa %}
-    <div id="modaldelete{{row.id}}" class="modal fade" role="dialog">
+    <div id="modaldelete{{row.id_desa}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -203,7 +224,7 @@
             <div class="modal-body card-body register-card-body">
               <h6><b>ID</b></h6>
               <div class="form-group input-group">
-                <input type="text" class="form-control" value="{{row.id}}" disabled>
+                <input type="text" class="form-control" value="{{row.id_desa}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -221,7 +242,7 @@
               </div>
               <form action="{{ url_for('main.input_data_desa_delete') }}" method="POST">
                   <div class="modal-footer">
-                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="hidden"  name="id_desa" value="{{row.id_desa}}">
                     <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                   </div>

@@ -15,13 +15,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Pupuk</h1>
+            <h1 class="m-0">Data Hama</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
               <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
-              <li class="breadcrumb-item active">Data Pupuk</li>
+              <li class="breadcrumb-item active">Data Hama</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Table Pupuk</h3>
+                <h3 class="card-title">Data Table Hama</h3>
                 <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
@@ -61,7 +61,7 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nama Pupuk</th>
+                      <th>Nama Hama</th>
                       <th>Volume Satuan</th>
                       <th>Harga</th>
                       <th>Pemulia</th>
@@ -70,17 +70,17 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for row in pupuk %}
+                    {% for row in hama %}
                       <tr>
-                        <td>{{row.id_pupuk}}</td>
+                        <td>{{row.id_hama}}</td>
                         <td>{{row.nama}}</td>
                         <td>{{row.vol_sat}}</td>
                         <td>{{row.harga}}</td>
                         <td>{{row.pemulia}}</td>
                         <td>{{row.keterangan}}</td>
                         <td>
-                          <a class="edit-input-data-btn" href="/input-data/data-pupuk/update/{{row.id_pupuk}}" data-toggle="modal" data-target="#modaledit{{row.id_pupuk}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-pupuk/delete/{{row.id_pupuk}}" data-toggle="modal" data-target="#modaldelete{{row.id_pupuk}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-pupuk/update/{{row.id_hama}}" data-toggle="modal" data-target="#modaledit{{row.id_hama}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-pupuk/delete/{{row.id_hama}}" data-toggle="modal" data-target="#modaldelete{{row.id_hama}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -102,19 +102,19 @@
     <!-- /.content -->
   </div>
 
-  <!-- Modal Edit Pupuk-->
-  {% for row in pupuk %}
-    <div id="modaledit{{row.id_pupuk}}" class="modal fade" role="dialog">
+  <!-- Modal Edit Hama-->
+  {% for row in hama %}
+    <div id="modaledit{{row.id_hama}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Pupuk</h4>
+              <h4 class="modal-title">Ubah Data Hama</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_pupuk_update') }}" method="POST">
+              <form action="{{ url_for('main.input_data_hama_update') }}" method="POST">
                   <div class="form-group input-group">
-                    <input type="hidden"  name="id_pupuk" value="{{row.id_pupuk}}">
-                    <input type="text" class="form-control" name="nama" placeholder="Nama Pupuk" value="{{row.nama}}">
+                    <input type="hidden"  name="id_hama" value="{{row.id_hama}}">
+                    <input type="text" class="form-control" name="nama" placeholder="Nama Hama" value="{{row.nama}}">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="bi bi-geo-alt"></span>
@@ -164,15 +164,15 @@
     </div>
   {% endfor %}
               
-  <!-- Modal Add Pupuk-->
+  <!-- Modal Add Hama-->
   <div id="mymodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Pupuk</h4>
+            <h4 class="modal-title">Tambah Hama</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_pupuk_add')}}" method="POST">
+            <form action="{{url_for('main.input_data_hama_add')}}" method="POST">
                 <div class="form-group input-group">
                   <input type="number" class="form-control" name="id" placeholder="ID" required>
                   <div class="input-group-append">
@@ -182,7 +182,7 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Pupuk" required>
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Hama" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="bi bi-geo-alt"></span>
@@ -231,18 +231,18 @@
     </div>
   </div>
 
-  <!-- Modal Delete Pupuk-->
-  {% for row in pupuk %}
-    <div id="modaldelete{{row.id_pupuk}}" class="modal fade" role="dialog">
+  <!-- Modal Delete Hama -->
+  {% for row in hama %}
+    <div id="modaldelete{{row.id_hama}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Hapus Data Pupuk</h4>
+              <h4 class="modal-title">Hapus Data Hama</h4>
             </div>
             <div class="modal-body card-body register-card-body">
               <h6><b>ID</b></h6>
               <div class="form-group input-group">
-                <input type="text" class="form-control" value="{{row.id_pupuk}}" disabled>
+                <input type="text" class="form-control" value="{{row.id_hama}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -294,9 +294,9 @@
                   </div>
                 </div>
               </div>
-              <form action="{{ url_for('main.input_data_pupuk_delete') }}" method="POST">
+              <form action="{{ url_for('main.input_data_hama_delete') }}" method="POST">
                   <div class="modal-footer">
-                    <input type="hidden"  name="id_pupuk" value="{{row.id_pupuk}}">
+                    <input type="hidden"  name="id_hama" value="{{row.id_hama}}">
                     <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                   </div>

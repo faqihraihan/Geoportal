@@ -68,19 +68,19 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
         <a class="nav-link nav-profile" data-toggle="dropdown" href="#">
-            {% if not img %}
+            {% if not foto %}
             <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
             {% else %}
-            <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+            <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
             {% endif %}
             <i class="bi bi-chevron-down iprofile"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <div class="div-profile">
-                {% if not img %}
+                {% if not foto %}
                 <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
                 {% else %}
-                <img src="data:;base64,{{ img }}" class="img-circle profile" alt="User Image">
+                <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
                 {% endif %}
                 <span class="profile-list">{{name}}</span>
                 <a class="profile-btn" href="{{ url_for('main.profil_me') }}">Profil</a>
@@ -156,7 +156,7 @@
 
     <!-- Modal Ubah Foto Profil User-->
     {% for row in user %}
-    <div id="modaleditfp{{row.id}}" class="modal fade" role="dialog">
+    <div id="modaleditfp{{row.id_users}}" class="modal fade" role="dialog">
         <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -165,7 +165,7 @@
             <div class="modal-body card-body register-card-body">
                 <form action="{{ url_for('auth.update_foto_profile_user') }}" method="POST" enctype="multipart/form-data">
                     <div class="form-group input-group">
-                        <input type="hidden"  name="id" value="{{row.id}}">
+                        <input type="hidden"  name="id" value="{{row.id_users}}">
                     <input type="file" class="form-control" name="fp" value="{{row.fp}}" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -184,7 +184,7 @@
     </div>
 
     <!-- Modal Ubah Data User-->
-    <div id="modaleditprofil{{row.id}}" class="modal fade" role="dialog">
+    <div id="modaleditprofil{{row.id_users}}" class="modal fade" role="dialog">
         <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -193,7 +193,7 @@
             <div class="modal-body card-body register-card-body">
                 <form action="{{ url_for('auth.update_data_profile_user') }}" method="POST">
                     <div class="form-group input-group">
-                        <input type="hidden"  name="id" value="{{row.id}}">
+                        <input type="hidden"  name="id" value="{{row.id_users}}">
                     <input type="text" class="form-control" name="name" placeholder="Full name" value="{{row.nama}}" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -202,7 +202,7 @@
                     </div>
                     </div>
                     <div class="form-group input-group">
-                    <input type="text" class="form-control" name="nohp" placeholder="No. Hp" value="{{row.nohp}}" required>
+                    <input type="text" class="form-control" name="telp" placeholder="No. Hp" value="{{row.telp}}" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                         <span class="fas fa-address-book"></span>
@@ -220,7 +220,7 @@
     </div>
 
     <!-- Modal Ubah Password-->
-    <div id="modaleditpass{{row.id}}" class="modal fade" role="dialog">
+    <div id="modaleditpass{{row.id_users}}" class="modal fade" role="dialog">
         <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -229,7 +229,7 @@
             <div class="modal-body card-body register-card-body">
                 <form action="{{ url_for('auth.update_pass_profile_user') }}" method="POST">
                     <div class="form-group input-group">
-                        <input type="hidden"  name="id" value="{{row.id}}">
+                        <input type="hidden"  name="id" value="{{row.id_users}}">
                     <input type="password" class="form-control" name="password" placeholder="New Password" required>
                     <div class="input-group-append">
                         <div class="input-group-text">

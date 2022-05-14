@@ -15,13 +15,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Bibit</h1>
+            <h1 class="m-0">Data Racun</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
               <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
-              <li class="breadcrumb-item active">Data Bibit</li>
+              <li class="breadcrumb-item active">Data Racun</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Table Bibit</h3>
+                <h3 class="card-title">Data Table Racun</h3>
                 <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
@@ -61,24 +61,26 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nama Komuditas</th>
+                      <th>Nama Racun</th>
                       <th>Volume Satuan</th>
                       <th>Harga</th>
                       <th>Pemulia</th>
+                      <th>Keterangan</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for row in bibit %}
+                    {% for row in racun %}
                       <tr>
-                        <td>{{row.id}}</td>
+                        <td>{{row.id_racun}}</td>
                         <td>{{row.nama}}</td>
                         <td>{{row.vol_sat}}</td>
                         <td>{{row.harga}}</td>
                         <td>{{row.pemulia}}</td>
+                        <td>{{row.keterangan}}</td>
                         <td>
-                          <a class="edit-input-data-btn" href="/input-data/data-bibit/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-bibit/delete/{{row.id}}" data-toggle="modal" data-target="#modaldelete{{row.id}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-pupuk/update/{{row.id_racun}}" data-toggle="modal" data-target="#modaledit{{row.id_racun}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-pupuk/delete/{{row.id_racun}}" data-toggle="modal" data-target="#modaldelete{{row.id_racun}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -100,19 +102,19 @@
     <!-- /.content -->
   </div>
 
-  <!-- Modal Edit Bibit-->
-  {% for row in bibit %}
-    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+  <!-- Modal Edit Racun-->
+  {% for row in racun %}
+    <div id="modaledit{{row.id_racun}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Bibit</h4>
+              <h4 class="modal-title">Ubah Data Racun</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_bibit_update') }}" method="POST">
+              <form action="{{ url_for('main.input_data_racun_update') }}" method="POST">
                   <div class="form-group input-group">
-                    <input type="hidden"  name="id_bibit" value="{{row.id}}">
-                    <input type="text" class="form-control" name="nama" placeholder="Nama Komuditas" value="{{row.nama}}">
+                    <input type="hidden"  name="id_racun" value="{{row.id_racun}}">
+                    <input type="text" class="form-control" name="nama" placeholder="Nama Racun" value="{{row.nama}}">
                     <div class="input-group-append">
                       <div class="input-group-text">
                         <span class="bi bi-geo-alt"></span>
@@ -143,6 +145,14 @@
                       </div>
                     </div>
                   </div>
+                  <div class="form-group input-group">
+                    <input type="text" class="form-control" name="keterangan" placeholder="Keterangan" value="{{row.keterangan}}">
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-tasks"></span>
+                      </div>
+                    </div>
+                  </div>
                   <div class="modal-footer">
                     <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -154,15 +164,15 @@
     </div>
   {% endfor %}
               
-  <!-- Modal Add Bibit-->
+  <!-- Modal Add Racun-->
   <div id="mymodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Bibit</h4>
+            <h4 class="modal-title">Tambah Racun</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_bibit_add')}}" method="POST">
+            <form action="{{url_for('main.input_data_racun_add')}}" method="POST">
                 <div class="form-group input-group">
                   <input type="number" class="form-control" name="id" placeholder="ID" required>
                   <div class="input-group-append">
@@ -172,7 +182,7 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Komuditas" required>
+                  <input type="text" class="form-control" name="nama" placeholder="Nama Racun" required>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="bi bi-geo-alt"></span>
@@ -203,6 +213,14 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-group input-group">
+                  <input type="text" class="form-control" name="keterangan" placeholder="Keterangan">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-tasks"></span>
+                    </div>
+                  </div>
+                </div>
                 <div class="modal-footer">
                   <button class="btn btn-primary btn-success" type="submit">Tambah</button>
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -213,27 +231,27 @@
     </div>
   </div>
 
-  <!-- Modal Delete Bibit-->
-  {% for row in bibit %}
-    <div id="modaldelete{{row.id}}" class="modal fade" role="dialog">
+  <!-- Modal Delete Racun-->
+  {% for row in racun %}
+    <div id="modaldelete{{row.id_racun}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Hapus Data Bibit</h4>
+              <h4 class="modal-title">Hapus Data Racun</h4>
             </div>
             <div class="modal-body card-body register-card-body">
               <h6><b>ID</b></h6>
               <div class="form-group input-group">
-                <input type="number" class="form-control" placeholder="ID" value="{{row.id}}" disabled>
+                <input type="text" class="form-control" value="{{row.id_racun}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
                   </div>
                 </div>
               </div>
-              <h6><b>Nama Komuditas</b></h6>
+              <h6><b>Nama Racun</b></h6>
               <div class="form-group input-group">
-                <input type="text" class="form-control" placeholder="Nama Komuditas" value="{{row.nama}}" disabled>
+                <input type="text" class="form-control" value="{{row.nama}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="bi bi-geo-alt"></span>
@@ -242,7 +260,7 @@
               </div>
               <h6><b>Volume Satuan</b></h6>
               <div class="form-group input-group">
-                <input type="number" class="form-control" placeholder="Volume Satuan" value="{{row.vol_sat}}" disabled>
+                <input type="number" class="form-control" value="{{row.vol_sat}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -251,7 +269,7 @@
               </div>
               <h6><b>Harga</b></h6>
               <div class="form-group input-group">
-                <input type="number" class="form-control" placeholder="Harga" value="{{row.harga}}" disabled>
+                <input type="number" class="form-control" value="{{row.harga}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -260,16 +278,25 @@
               </div>
               <h6><b>Pemulia</b></h6>
               <div class="form-group input-group">
-                <input type="text" class="form-control" placeholder="Pemulia" value="{{row.pemulia}}" disabled>
+                <input type="text" class="form-control" value="{{row.pemulia}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-user"></span>
                   </div>
                 </div>
               </div>
-              <form action="{{ url_for('main.input_data_bibit_delete') }}" method="POST">
+              <h6><b>Keterangan</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.Keterangan}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-tasks"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_racun_delete') }}" method="POST">
                   <div class="modal-footer">
-                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="hidden"  name="id_racun" value="{{row.id_racun}}">
                     <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                   </div>

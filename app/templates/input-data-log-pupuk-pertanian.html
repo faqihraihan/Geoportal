@@ -15,13 +15,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Peta Desa</h1>
+            <h1 class="m-0">Data Log Pupuk Pertanian</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
               <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
-              <li class="breadcrumb-item active"> Data Peta Desa</li>
+              <li class="breadcrumb-item active">Data Log Pupuk Pertanian</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Peta Desa</h3>
+                <h3 class="card-title">Data Table Log Pupuk Pertanian</h3>
                 <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
@@ -61,22 +61,28 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nama Desa</th>
-                      <th>Peta</th>
+                      <th>Petani</th>
+                      <th>Alamat</th>
+                      <th>Komoditas</th>
+                      <th>Waktu Tanam</th>
+                      <th>Waktu Panen</th>
+                      <th>Pupuk</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for row in peta_desa %}
+                    {% for row in log_pupuk_pertanian %}
                       <tr>
-                        <td>{{row.id}}</td>
-                        <td>{{row.nama}}</td>
+                        <td>{{row.id_detaillog}}</td>
+                        <td>{{row.log_tanam.lahan.petani.nama}}</td>
+                        <td>{{row.log_tanam.lahan.alamat}}</td>
+                        <td>{{row.log_tanam.komoditas.nama}}</td>
+                        <td>{{row.log_tanam.tgl_mulai}}</td>
+                        <td>{{row.log_tanam.tgl_selesai}}</td>
+                        <td>{{row.pupuk.nama}}</td>
                         <td>
-                          <a class="view-input-data-btn" href="/gis/{{row.id}}">Lihat</a>
-                        </td>
-                        <td>
-                          <a class="edit-input-data-btn" href="/input-data/peta-desa/update/{{row.id}}" data-toggle="modal" data-target="#modaledit{{row.id}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/peta-desa/delete/{{row.id}}" data-toggle="modal" data-target="#modaldelete{{row.id}}">Hapus</a>
+                          <a class="edit-input-data-btn" href="/input-data/data-log-pupuk-pertanian/update/{{row.id_detaillog}}" data-toggle="modal" data-target="#modaledit{{row.id_detaillog}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-log-pupuk-pertanian/delete/{{row.id_detaillog}}" data-toggle="modal" data-target="#modaldelete{{row.id_detaillog}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -98,37 +104,34 @@
     <!-- /.content -->
   </div>
 
-  <!-- Modal Edit Peta Desa-->
-  {% for row in peta_desa %}
-    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+  <!-- Modal Edit Log Pupuk Pertanian-->
+  {% for row in log_pupuk_pertanian %}
+    <div id="modaledit{{row.id_detaillog}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Peta Desa</h4>
+              <h4 class="modal-title">Ubah Data Log Pupuk Pertanian</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_peta_desa_update') }}" enctype=multipart/form-data method="POST">
-                  <div class="form-group input-group">
-                    <input type="hidden"  name="id_desa" value="{{row.id}}">
-                    <input type="text" class="form-control" name="nama" placeholder="Nama Desa" value="{{row.nama}}">
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="bi bi-geo-alt"></span>
-                      </div>
+              <form action="{{ url_for('main.input_data_log_pupuk_pertanian_update') }}" method="POST">
+                <div class="form-group input-group">
+                  <input type="hidden"  name="id_detaillog" value="{{row.id_detaillog}}">
+                  <select name="pupuk" class="form-control add"> 
+                    <option value="{{row.pupuk.nama}}" disabled selected hidden>{{row.pupuk.nama}}</option>  
+                    {% for row in pupuk %} 
+                      <option value="{{ row.id_pupuk }}">{{ row.id_pupuk }} | {{ row.nama }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
                     </div>
                   </div>
-                  <div class="form-group input-group">
-                    <input type="file" class="form-control" name="json" placeholder="JSON" value="{{row.json}}">
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="bi bi-geo-alt"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-primary btn-wrn" type="submit">Ubah</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
               </form>
             </div>
         </div>
@@ -136,20 +139,20 @@
     </div>
   {% endfor %}
               
-  <!-- Modal Add Peta Desa-->
+  <!-- Modal Add Log Pupuk Pertanian-->
   <div id="mymodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Peta Desa</h4>
+            <h4 class="modal-title">Tambah Log Pupuk Pertanian</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_peta_desa_add')}}" enctype=multipart/form-data method="POST">
+            <form action="{{url_for('main.input_data_log_pupuk_pertanian_add')}}" method="POST">
               <div class="form-group input-group">
                 <select name="provinsi" id="prov-add-response" class="form-control add" required> 
                   <option value="" disabled selected hidden>Provinsi</option>  
                   {% for row in provinsi %} 
-                    <option value="{{ row.id }}">{{ row.id }} | {{ row.nama }}</option>
+                    <option value="{{ row.id_prov }}">{{ row.id_prov }} | {{ row.nama }}</option>
                   {% endfor %}
                 </select>
                 <div class="input-group-append">
@@ -177,7 +180,7 @@
                     <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
-              </div> 
+              </div>
               <div class="form-group input-group">
                 <select name="desa" class="form-control add" id="desa-add-response" required> 
                   <option value="" disabled selected hidden>Desa</option>  
@@ -189,7 +192,52 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="file" class="form-control" name="json" placeholder="JSON">
+                <select name="poktan" class="form-control add" id="poktan-add-response" required> 
+                  <option value="" disabled selected hidden>Kelompok Tani</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="petani" class="form-control add" id="petani-add-response" required> 
+                  <option value="" disabled selected hidden>Petani</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="lahan" class="form-control add" id="lahan-add-response" required> 
+                  <option value="" disabled selected hidden>Lahan</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="log" class="form-control add" id="log-tanam-add-response" required> 
+                  <option value="" disabled selected hidden>Waktu Tanam</option>  
+                </select>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <select name="pupuk" class="form-control add" required> 
+                  <option value="" disabled selected hidden>Pupuk</option>  
+                  {% for row in pupuk %} 
+                    <option value="{{ row.id_pupuk }}">{{ row.id_pupuk }} | {{ row.nama }}</option>
+                  {% endfor %}
+                </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="bi bi-geo-alt"></span>
@@ -206,36 +254,72 @@
     </div>
   </div>
 
-  <!-- Modal Delete Peta Desa-->
-  {% for row in peta_desa %}
-    <div id="modaldelete{{row.id}}" class="modal fade" role="dialog">
+  <!-- Modal Delete Log Pupuk Pertanian-->
+  {% for row in log_pupuk_pertanian %}
+    <div id="modaldelete{{row.id_detaillog}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Hapus Data Peta Desa</h4>
+              <h4 class="modal-title">Hapus Data Log Pupuk Pertanian</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <h6><b>ID</b></h6>
+              <h6><b>Nama Petani</b></h6>
               <div class="form-group input-group">
-                <input type="text" class="form-control" value="{{row.id}}" disabled>
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <span class="fas fa-sort-numeric-up"></span>
-                  </div>
-                </div>
-              </div>
-              <h6><b>Nama Desa</b></h6>
-              <div class="form-group input-group">
-                <input type="text" class="form-control" value="{{row.nama}}" disabled>
+                <input type="text" class="form-control" value="{{row.log_tanam.lahan.petani.nama}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-user"></span>
                   </div>
                 </div>
               </div>
-              <form action="{{ url_for('main.input_data_peta_desa_delete') }}" method="POST">
+              <h6><b>Alamat Lahan</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.log_tanam.lahan.alamat}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Komoditas</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.log_tanam.komoditas.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Waktu Tanam</b></h6>
+              <div class="form-group input-group">
+                <input type="date" class="form-control" value="{{row.log_tanam.tgl_mulai}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Waktu Panen</b></h6>
+              <div class="form-group input-group">
+                <input type="date" class="form-control" value="{{row.log_tanam.tgl_selesai}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <h6><b>Pupuk</b></h6>
+              <div class="form-group input-group">
+                <input type="text" class="form-control" value="{{row.pupuk.nama}}" disabled>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <form action="{{ url_for('main.input_data_log_pupuk_pertanian_delete') }}" method="POST">
                   <div class="modal-footer">
-                    <input type="hidden"  name="id" value="{{row.id}}">
+                    <input type="hidden"  name="id_detaillog" value="{{row.id_detaillog}}">
                     <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                   </div>

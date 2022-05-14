@@ -15,13 +15,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Gapoktan</h1>
+            <h1 class="m-0">Data Individu Lahan</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">Beranda</a></li>
               <li class="breadcrumb-item"><a href="{{ url_for('main.input_data') }}">Input Data</a></li>
-              <li class="breadcrumb-item active">Data Gapoktan</li>
+              <li class="breadcrumb-item active">Data Individu Lahan</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -52,7 +52,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Table Gapoktan</h3>
+                <h3 class="card-title">Data Table Individu Lahan</h3>
                 <a class="add-input-data-btn" href="" data-toggle="modal" data-target="#mymodal">Tambah</a>
               </div>
               <!-- /.card-header -->
@@ -61,24 +61,32 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nama Gapoktan</th>
-                      <th>Ketua</th>
-                      <th>Telp/No. Hp</th>
-                      <th>Nomor SK Bupati</th>
+                      <th>Petani</th>
+                      <th>Alamat</th>
+                      <th>Luas</th>
+                      <th>Waktu</th>
+                      <th>Foto</th>
+                      <th>Peta</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for row in gapoktan %}
+                    {% for row in individu_lahan %}
                       <tr>
-                        <td>{{row.id_gapoktan}}</td>
-                        <td>{{row.nama}}</td>
-                        <td>{{row.ketua}}</td>
-                        <td>{{row.telp}}</td>
-                        <td>{{row.no_sk}}</td>
+                        <td>{{row.id_lahan}}</td>
+                        <td>{{row.petani.nama}}</td>
+                        <td>{{row.alamat}}</td>
+                        <td>{{row.luas}}</td>
+                        <td>{{row.datetime}}</td>
                         <td>
-                          <a class="edit-input-data-btn" href="/input-data/data-gapoktan/update/{{row.id_gapoktan}}" data-toggle="modal" data-target="#modaledit{{row.id_gapoktan}}">Ubah</a>
-                          <a class="delete-input-data-btn" href="/input-data/data-gapoktan/delete/{{row.id_gapoktan}}" data-toggle="modal" data-target="#modaldelete{{row.id_gapoktan}}">Hapus</a>
+                          <img src="data:;base64,{{foto_lahan}}" class="img-circle img-lahan" alt="Lahan Image">
+                        </td>
+                        <td>
+                          <a class="view-input-data-btn" href="/gis/{{row.id_lahan}}">Lihat</a>
+                        </td>
+                        <td>
+                          <a class="edit-input-data-btn" href="/input-data/data-individu-lahan/update/{{row.id_lahan}}" data-toggle="modal" data-target="#modaledit{{row.id_lahan}}">Ubah</a>
+                          <a class="delete-input-data-btn" href="/input-data/data-individu-lahan/delete/{{row.id_lahan}}" data-toggle="modal" data-target="#modaldelete{{row.id_lahan}}">Hapus</a>
                         </td>
                       </tr>
                     {% endfor %}
@@ -100,35 +108,27 @@
     <!-- /.content -->
   </div>
 
-  <!-- Modal Edit Gapoktan-->
-  {% for row in gapoktan %}
-    <div id="modaledit{{row.id_gapoktan}}" class="modal fade" role="dialog">
+  <!-- Modal Edit Individu Lahan-->
+  {% for row in individu_lahan %}
+    <div id="modaledit{{row.id_lahan}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Gapoktan</h4>
+              <h4 class="modal-title">Ubah Data Lahan</h4>
             </div>
             <div class="modal-body card-body register-card-body">
-              <form action="{{ url_for('main.input_data_gapoktan_update') }}" method="POST">
+              <form action="{{ url_for('main.input_data_individu_lahan_update') }}" enctype="multipart/form-data" method="POST">
                 <div class="form-group input-group">
-                  <input type="hidden"  name="id_gapoktan" value="{{row.id_gapoktan}}">
-                  <input type="text" class="form-control" name="nama" placeholder="Nama Gapoktan" value="{{row.nama}}">
+                  <input type="hidden"  name="id_lahan" value="{{row.id_lahan}}">
+                  <input type="text" class="form-control" name="alamat" placeholder="Alamat" value="{{row.alamat}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
-                      <span class="fas fa-user"></span>
+                      <span class="bi bi-geo-alt"></span>
                     </div>
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="text" class="form-control" name="ketua" placeholder="Ketua" value="{{row.ketua}}">
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-user"></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group input-group">
-                  <input type="number" class="form-control" name="telp" placeholder="Telp/No. Hp" value="{{row.telp}}">
+                  <input type="number" class="form-control" name="luas" placeholder="Luas" value="{{row.luas}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-sort-numeric-up"></span>
@@ -136,10 +136,26 @@
                   </div>
                 </div>
                 <div class="form-group input-group">
-                  <input type="number" class="form-control" name="no-sk" placeholder="Nomor SK Bupati" value="{{row.no_sk}}">
+                  <input type="date" class="form-control" name="datetime" placeholder="Waktu" value="{{row.datetime}}">
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-sort-numeric-up"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="file" class="form-control" name="foto" placeholder="Foto" value="{{row.foto}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group input-group">
+                  <input type="file" class="form-control" name="json" placeholder="JSON" value="{{row.polygon}}">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
                     </div>
                   </div>
                 </div>
@@ -154,15 +170,15 @@
     </div>
   {% endfor %}
               
-  <!-- Modal Add Gapoktan-->
+  <!-- Modal Add Individu Lahan-->
   <div id="mymodal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Gapoktan</h4>
+            <h4 class="modal-title">Tambah Lahan</h4>
           </div>
           <div class="modal-body card-body register-card-body">
-            <form action="{{url_for('main.input_data_gapoktan_add')}}" method="POST">
+            <form action="{{url_for('main.input_data_individu_lahan_add')}}" enctype="multipart/form-data" method="POST">
               <div class="form-group input-group">
                 <select name="provinsi" id="prov-add-response" class="form-control add" required> 
                   <option value="" disabled selected hidden>Provinsi</option>  
@@ -195,7 +211,7 @@
                     <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
-              </div> 
+              </div>
               <div class="form-group input-group">
                 <select name="desa" class="form-control add" id="desa-add-response" required> 
                   <option value="" disabled selected hidden>Desa</option>  
@@ -205,17 +221,21 @@
                     <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
-              </div> 
+              </div>
               <div class="form-group input-group">
-                <input type="number" class="form-control" name="id_gapoktan" placeholder="ID Gapoktan" required>
+                <select name="poktan" class="form-control add" id="poktan-add-response" required> 
+                  <option value="" disabled selected hidden>Kelompok Tani</option>  
+                </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
-                    <span class="fas fa-sort-numeric-up"></span>
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="text" class="form-control" name="nama" placeholder="Nama Gapoktan" required>
+                <select name="petani" class="form-control add" id="petani-add-response" required> 
+                  <option value="" disabled selected hidden>Petani</option>  
+                </select>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-user"></span>
@@ -223,15 +243,7 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                  <input type="text" class="form-control" name="ketua" placeholder="Ketua" required>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-user"></span>
-                    </div>
-                  </div>
-              </div>
-              <div class="form-group input-group">
-                <input type="number" class="form-control" name="telp" placeholder="Telp/No. Hp">
+                <input type="number" class="form-control" name="lahan" placeholder="ID Lahan" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
@@ -239,10 +251,42 @@
                 </div>
               </div>
               <div class="form-group input-group">
-                <input type="number" class="form-control" name="no-sk" placeholder="Nomor SK Bupati">
+                <input type="text" class="form-control" name="alamat" placeholder="Alamat" required>
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="number" class="form-control" name="luas" placeholder="Luas" required>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="date" class="form-control" name="datetime" placeholder="Waktu">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-calendar"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group input-group">
+                  <input type="file" class="form-control" name="foto" placeholder="Foto">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="bi bi-geo-alt"></span>
+                    </div>
+                  </div>
+              </div>
+              <div class="form-group input-group">
+                <input type="file" class="form-control" name="json" placeholder="JSON">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
               </div>
@@ -256,63 +300,54 @@
     </div>
   </div>
 
-  <!-- Modal Delete Gapoktan-->
-  {% for row in gapoktan %}
-    <div id="modaldelete{{row.id_gapoktan}}" class="modal fade" role="dialog">
+  <!-- Modal Delete Individu Lahan-->
+  {% for row in individu_lahan %}
+    <div id="modaldelete{{row.id_lahan}}" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Hapus Data Gapoktan</h4>
+              <h4 class="modal-title">Hapus Data Lahan</h4>
             </div>
             <div class="modal-body card-body register-card-body">
               <h6><b>ID</b></h6>
               <div class="form-group input-group">
-                <input type="text" class="form-control" value="{{row.id_gapoktan}}" disabled>
+                <input type="text" class="form-control" value="{{row.id_lahan}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
                   </div>
                 </div>
               </div>
-              <h6><b>Nama Gapoktan</b></h6>
+              <h6><b>Alamat</b></h6>
               <div class="form-group input-group">
-                <input type="text" class="form-control" value="{{row.nama}}" disabled>
+                <input type="text" class="form-control" value="{{row.alamat}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
-                    <span class="fas fa-user"></span>
+                    <span class="bi bi-geo-alt"></span>
                   </div>
                 </div>
               </div>
-              <h6><b>Ketua</b></h6>
+              <h6><b>Luas</b></h6>
               <div class="form-group input-group">
-                  <input type="text" class="form-control" value="{{row.ketua}}" disabled>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-user"></span>
-                    </div>
-                  </div>
-              </div>
-              <h6><b>Telp/No. Hp</b></h6>
-              <div class="form-group input-group">
-                <input type="number" class="form-control" value="{{row.telp}}" disabled>
+                <input type="number" class="form-control" value="{{row.luas}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
                   </div>
                 </div>
               </div>
-              <h6><b>Nomor SK Bupati</b></h6>
+              <h6><b>Waktu</b></h6>
               <div class="form-group input-group">
-                <input type="number" class="form-control" value="{{row.no_sk}}" disabled>
+                <input type="date" class="form-control" value="{{row.datetime}}" disabled>
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-sort-numeric-up"></span>
                   </div>
                 </div>
               </div>
-              <form action="{{ url_for('main.input_data_gapoktan_delete') }}" method="POST">
+              <form action="{{ url_for('main.input_data_individu_lahan_delete') }}" method="POST">
                   <div class="modal-footer">
-                    <input type="hidden"  name="id_gapoktan" value="{{row.id_gapoktan}}">
+                    <input type="hidden"  name="id_lahan" value="{{row.id_lahan}}">
                     <button class="btn btn-primary btn-dgr" type="submit">Hapus</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                   </div>
