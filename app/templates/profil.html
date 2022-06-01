@@ -50,7 +50,7 @@
                     {% if not foto %}
                     <img class="profile-user-img img-fluid img-circle" src="../static/img/user.png" alt="User profile picture">
                     {% else %}
-                    <img class="profile-user-img img-fluid img-circle" src="data:;base64,{{ foto }}" alt="User profile picture">
+                    <img class="profile-user-img img-fluid img-circle" src="../static/img/uploaded_images/users/{{ foto }}" alt="User profile picture">
                     {% endif %}
                 </div>
 
@@ -97,13 +97,13 @@
             <div class="card">
                 <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                    <li class="nav-item"><a class="nav-link active" href="#petaku" data-toggle="tab">Petaku</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#comingsoon" data-toggle="tab">Coming Soon</a></li>
                     <li class="nav-item"><a class="nav-link" href="#nextcomingsoon" data-toggle="tab">Coming Soon</a></li>
                 </ul>
                 </div><!-- /.card-header -->
                 <div class="card-body">
                 <div class="tab-content">
-                    <div class="active tab-pane" id="petaku">
+                    <div class="active tab-pane" id="comingsoon">
                         <!-- Post -->
                         <div class="post">
                             <p>
@@ -117,7 +117,7 @@
                         <!-- Post -->
                         <div class="post">
                             <p>
-                            Coming Soon
+                            Yeah! Coming Soon
                             </p>
                         </div>
                     </div>

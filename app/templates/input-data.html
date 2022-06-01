@@ -28,31 +28,16 @@
         <div class="row">
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-info">
+            <div class="small-box bg-danger">
               <div class="inner">
-                <h3>0</h3>
+                <h3>{{ gapoktan }}</h3>
 
-                <p>Jumlah Lahan dan Luas</p>
+                <p>Data Gabungan Kelompok Tani</p>
               </div>
               <div class="icon">
-                <i class="ion ion-earth"></i>
+                <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h3>0<sup style="font-size: 20px"></sup></h3>
-
-                <p>Jumlah Petani</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ url_for('main.input_data_gapoktan') }}" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -62,7 +47,7 @@
               <div class="inner">
                 <h3>{{ poktan }}</h3>
 
-                <p>Jumlah Kelompok Tani</p>
+                <p>Data Kelompok Tani</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -73,16 +58,31 @@
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-danger">
+            <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{ gapoktan }}</h3>
+                <h3>{{ petani }}<sup style="font-size: 20px"></sup></h3>
 
-                <p>Jumlah Gabungan Kelompok Tani</p>
+                <p>Data Individu Petani</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion ion-person-add"></i>
               </div>
-              <a href="{{ url_for('main.input_data_gapoktan') }}" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ url_for('main.input_data_individu_petani') }}" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>{{ lahan }}</h3>
+
+                <p>Data Individu Lahan</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-earth"></i>
+              </div>
+              <a href="{{ url_for('main.input_data_individu_lahan') }}" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

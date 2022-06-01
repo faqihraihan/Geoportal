@@ -70,7 +70,7 @@
                 {% if not foto %}
                 <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
                 {% else %}
-                <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
+                <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle profile" alt="User Image">
                 {% endif %}
                 <i class="bi bi-chevron-down iprofile"></i>
               </div>
@@ -79,7 +79,7 @@
                   {% if not foto %}
                   <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
                   {% else %}
-                  <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
+                  <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle profile" alt="User Image">
                   {% endif %}
                   <span class="profile-list">{{name}}</span>
                   <a class="profile-btn" href="{{ url_for('main.profil_me') }}">Profil</a>

@@ -53,6 +53,8 @@
         <li class="nav-item d-none d-sm-inline-block">
         <a href="{{ url_for('main.home') }}" class="nav-link">Beranda</a>
         </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a class="nav-link active" disabled>Dashboard</a>
         </li>
         {% if not (level == 4 or level == 5) %}
             <li class="nav-item d-none d-sm-inline-block">
@@ -68,7 +70,7 @@
             {% if not foto %}
             <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
             {% else %}
-            <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
+            <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle profile" alt="User Image">
             {% endif %}
             <!-- <img src="../static/img/user.png" class="profile" alt="User Image"> -->
             <i class="bi bi-chevron-down iprofile"></i>
@@ -78,7 +80,7 @@
                 {% if not foto %}
                 <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
                 {% else %}
-                <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
+                <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle profile" alt="User Image">
                 {% endif %}
                 <span class="profile-list">{{name}}</span>
                 <a class="profile-btn" href="{{ url_for('main.profil_me') }}">Profil</a>
@@ -107,7 +109,7 @@
             {% if not foto %}
             <img src="../static/img/user.png" class="img-circle elevation-2" alt="User Image">
             {% else %}
-            <img src="data:;base64,{{ foto }}" class="img-circle elevation-2" alt="User Image">
+            <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle elevation-2" alt="User Image">
             {% endif %}
         </div>
         <div class="info">
@@ -134,7 +136,7 @@
                 with font-awesome or any other icon font library -->
             <li class="nav-item">
             {% if dashboard_navbar %}
-            <a href="#" class="nav-link {{ dashboard_navbar }}">
+            <a class="nav-link {{ dashboard_navbar }}" disabled>
             {% else %}
             <a href="{{ url_for('main.dashboard') }}" class="nav-link">
             {% endif %}

@@ -1,9 +1,9 @@
+import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User
 from . import db
-import base64
 
 auth = Blueprint('auth', __name__)
 
@@ -82,12 +82,11 @@ def logout():
 @ auth.route("/input-data/data-user")
 @ login_required
 def input_data_user():
-    image=None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
     active = 'active'
+    foto = current_user.foto
+
     all_data = User.query.all()
-    return render_template("input-data-user.html", foto=image, name=current_user.nama, level=current_user.level, input_data_user_navbar=active, user=all_data)
+    return render_template("input-data-user.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_user_navbar=active, user=all_data)
 
 
 @ auth.route("/input-data/data-user/add", methods=['POST'])
@@ -188,12 +187,18 @@ def update_pass_profile_user():
 def update_foto_profile_user():
     if request.method == 'POST':
         foto = request.files['fp']
-        foto = foto.read()
+        extfile = foto.filename.rsplit('.', 1)[1].lower()
 
         update = User.query.get(request.form.get('id'))
-        update.foto = foto
 
+        dir = 'app/static/img/uploaded_images/users'
+        if update.foto:
+            os.remove(os.path.join(dir, update.foto))
+
+        update.foto = "{}_usersimg.{}".format(update.id_users, extfile)
         db.session.commit()
+
+        foto.save(os.path.join(dir, "{}".format(update.foto)))
 
         flash("Foto profil berhasil diubah")
 

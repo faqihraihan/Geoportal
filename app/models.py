@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     nama = db.Column(db.VARCHAR(200))
     telp = db.Column(db.VARCHAR(200))
     level = db.Column(db.Integer)
-    foto = db.Column(db.LargeBinary(length=(2**32)-1))
+    foto = db.Column(db.VARCHAR(200))
     create_time = db.Column(db.DateTime, default=datetime.now())
     # last_update
     # session_id
@@ -83,7 +83,7 @@ class Petani(db.Model):
     tanggal_lahir = db.Column(db.VARCHAR(200))
     telp = db.Column(db.VARCHAR(200))
     alamat = db.Column(db.VARCHAR(200))
-    foto = db.Column(db.LargeBinary(length=(2**32)-1))
+    foto = db.Column(db.VARCHAR(200))
     pin_kordinat = db.Column(db.VARCHAR(200))
 
     lahan = db.relationship("Lahan", backref="petani")
@@ -95,7 +95,7 @@ class Lahan(db.Model):
     alamat = db.Column(db.VARCHAR(200))
     luas = db.Column(db.VARCHAR(200))
     datetime = db.Column(db.VARCHAR(200))
-    foto = db.Column(db.LargeBinary(length=(2**32)-1))
+    foto = db.Column(db.VARCHAR(200))
     polygon = db.Column(db.JSON)
 
     log_tanam = db.relationship("Log_Tanam", backref="lahan")
@@ -123,17 +123,6 @@ class Pupuk(db.Model):
     detaillog_pupuk = db.relationship("Detail_Log_Tanam_Pupuk", backref="pupuk")
 
 
-class Hama(db.Model):
-    id_hama = db.Column(db.Integer, primary_key=True)
-    nama = db.Column(db.VARCHAR(200))
-    vol_sat = db.Column(db.Integer)
-    harga = db.Column(db.Integer)
-    pemulia = db.Column(db.VARCHAR(200))
-    keterangan = db.Column(db.VARCHAR(200))
-
-    detaillog_hama = db.relationship("Detail_Log_Tanam_Hama", backref="hama")
-
-
 class Racun(db.Model):
     id_racun = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.VARCHAR(200))
@@ -154,19 +143,12 @@ class Log_Tanam(db.Model):
     total_produksi = db.Column(db.Integer)
 
     detail_log_tanam_pupuk = db.relationship("Detail_Log_Tanam_Pupuk", backref="log_tanam")
-    detail_log_tanam_hama = db.relationship("Detail_Log_Tanam_Hama", backref="log_tanam")
     detail_log_tanam_racun = db.relationship("Detail_Log_Tanam_Racun", backref="log_tanam")
 
 
 class Detail_Log_Tanam_Pupuk(db.Model):
     id_detaillog = db.Column(db.Integer, primary_key=True)
     id_pupuk = db.Column(db.Integer, db.ForeignKey('pupuk.id_pupuk'))
-    id_log = db.Column(db.Integer, db.ForeignKey('log__tanam.id_log'))
-
-
-class Detail_Log_Tanam_Hama(db.Model):
-    id_detaillog = db.Column(db.Integer, primary_key=True)
-    id_hama = db.Column(db.Integer, db.ForeignKey('hama.id_hama'))
     id_log = db.Column(db.Integer, db.ForeignKey('log__tanam.id_log'))
 
 

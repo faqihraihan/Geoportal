@@ -2,14 +2,13 @@ import os
 import numpy as np
 import patoolib
 import folium
-import base64
 import geopandas as gpd
 from folium.plugins import MousePosition
 from flask import Blueprint, render_template, url_for, redirect, request, flash, jsonify
 from flask_login import login_required, current_user
 from bs4 import BeautifulSoup
 import requests
-from .models import Provinsi, Kabupaten, Kecamatan, Desa, Gapoktan, Kelompok_Tani, Petani, Lahan, Komoditas, Pupuk, Hama, Racun, User, Log_Tanam, Detail_Log_Tanam_Pupuk, Detail_Log_Tanam_Hama, Detail_Log_Tanam_Racun
+from .models import Provinsi, Kabupaten, Kecamatan, Desa, Gapoktan, Kelompok_Tani, Petani, Lahan, Komoditas, Pupuk, Racun, User, Log_Tanam, Detail_Log_Tanam_Pupuk, Detail_Log_Tanam_Racun
 from . import db
 
 main = Blueprint('main', __name__)
@@ -38,19 +37,23 @@ def home():
     data = {'time': arr_time, 'price': arr_price}
 
     if current_user.is_authenticated:
-        image = None
-        if current_user.foto:
-            image = base64.b64encode(current_user.foto).decode('ascii')
-
-        return render_template("main.html", foto=image, name=current_user.nama, data=data)
+        foto = current_user.foto
+        return render_template("main.html", foto=foto, name=current_user.nama, data=data)
     return render_template("main.html", data=data)
 
 
 @ main.route("/gis", methods=['GET', 'POST'])
-@ main.route("/gis/<id>", methods=['GET', 'POST'])
-def gis(id=None):
+@ main.route("/gis/<maps>/<id>", methods=['GET', 'POST'])
+def gis(maps=None, id=None):
     if id:
-        data = Desa.query.filter_by(id_desa=id).first()
+        if maps == "desa":
+            data = Desa.query.filter_by(id_desa=id).first()
+        else:
+            data = Lahan.query.filter_by(id_lahan=id).first()
+
+        if not data.polygon:
+            flash("Peta tidak ditemukan")
+            return redirect(request.referrer)
 
         layer = gpd.read_file(data.polygon)
         layer = layer.to_crs("EPSG:4326")
@@ -72,11 +75,14 @@ def gis(id=None):
                 'fillOpacity': 0.7
             }
 
-        gjson = folium.GeoJson(layer, name=data.nama, style_function=style).add_to(m)
+        if maps == "desa":
+            gjson = folium.GeoJson(layer, name=data.nama, style_function=style).add_to(m)
+            folium.Popup(data.nama).add_to(gjson)
+        else:
+            gjson = folium.GeoJson(layer, name=data.petani.nama, style_function=style).add_to(m)
+            folium.Popup(data.alamat).add_to(gjson)
 
         m.fit_bounds(gjson.get_bounds())
-
-        folium.Popup(data.nama).add_to(gjson)
 
         formatter = "function(num) {return L.Util.formatNum(num, 3) + ' º ';};"
         MousePosition(
@@ -142,74 +148,47 @@ def profil():
 @ login_required
 def profil_me():
     all_data = User.query.all()
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
     active = 'active'
 
-    return render_template("profil.html", foto=image, id=current_user.id_users, name=current_user.nama, email=current_user.email, telp=current_user.telp, level=current_user.level, profil_navbar=active, user=all_data)
+    return render_template("profil.html", foto=foto, id=current_user.id_users, name=current_user.nama, email=current_user.email, telp=current_user.telp, level=current_user.level, profil_navbar=active, user=all_data)
 
 
 @ main.route("/dashboard")
 @ login_required
 def dashboard():
-    poktan = Kelompok_Tani.query.count()
     gapoktan = Gapoktan.query.count()
+    poktan = Kelompok_Tani.query.count()
+    petani = Petani.query.count()
+    lahan = Lahan.query.count()
 
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
     active = 'active'
-    return render_template('dashboard.html', foto=image, name=current_user.nama, level=current_user.level, poktan=poktan, gapoktan=gapoktan, dashboard_navbar=active)
 
-
-@ main.route("/dashboard/gapoktan")
-@ login_required
-def dashboard_gapoktan():
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
-
-    all_data = Gapoktan.query.all()
-    return render_template("dashboard-gapoktan.html", foto=image, name=current_user.nama, level=current_user.level, gapoktan=all_data)
-
-
-@ main.route("/dashboard/kelompok_tani")
-@ login_required
-def dashboard_kelompok_tani():
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
-
-    all_data = Kelompok_Tani.query.all()
-    return render_template("dashboard-kelompok-tani.html", foto=image, name=current_user.nama, level=current_user.level, kelompok_tani=all_data)
+    return render_template('dashboard.html', foto=foto, name=current_user.nama, level=current_user.level, gapoktan=gapoktan, poktan=poktan, petani=petani, lahan=lahan, dashboard_navbar=active)
 
 
 @ main.route("/input-data")
 @ login_required
 def input_data():
-    poktan = Kelompok_Tani.query.count()
     gapoktan = Gapoktan.query.count()
+    poktan = Kelompok_Tani.query.count()
+    petani = Petani.query.count()
+    lahan = Lahan.query.count()
 
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
     active = 'active'
-    return render_template("input-data.html", foto=image, name=current_user.nama, level=current_user.level, poktan=poktan, gapoktan=gapoktan, input_data_navbar=active)
+    return render_template("input-data.html", foto=foto, name=current_user.nama, level=current_user.level, gapoktan=gapoktan, poktan=poktan, petani=petani, lahan=lahan, input_data_navbar=active)
 
 
 @ main.route("/input-data/data-provinsi")
 @ login_required
 def input_data_provinsi():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     all_data = Provinsi.query.all()
-    return render_template("input-data-provinsi.html", foto=image, name=current_user.nama, level=current_user.level, input_data_provinsi_navbar=active, input_data_master_navbar=active, provinsi=all_data)
+    return render_template("input-data-provinsi.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_provinsi_navbar=active, input_data_wilayah_navbar=active, provinsi=all_data)
 
 
 @ main.route("/input-data/data-provinsi/add", methods=['POST'])
@@ -263,14 +242,11 @@ def input_data_provinsi_delete():
 @ login_required
 def input_data_kabupaten():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     provinsi = Provinsi.query.all()
     all_data = Kabupaten.query.all()
-    return render_template("input-data-kabupaten.html", foto=image, name=current_user.nama, level=current_user.level, input_data_kabupaten_navbar=active, input_data_master_navbar=active, provinsi=provinsi, kabupaten=all_data)
+    return render_template("input-data-kabupaten.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_kabupaten_navbar=active, input_data_wilayah_navbar=active, provinsi=provinsi, kabupaten=all_data)
 
 
 @ main.route("/input-data/data-kabupaten/live-search", methods=['GET', 'POST'])
@@ -335,14 +311,11 @@ def input_data_kabupaten_delete():
 @ login_required
 def input_data_kecamatan():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     provinsi = Provinsi.query.all()
     all_data = Kecamatan.query.all()
-    return render_template("input-data-kecamatan.html", foto=image, name=current_user.nama, level=current_user.level, input_data_kecamatan_navbar=active, input_data_master_navbar=active, provinsi=provinsi, kecamatan=all_data)
+    return render_template("input-data-kecamatan.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_kecamatan_navbar=active, input_data_wilayah_navbar=active, provinsi=provinsi, kecamatan=all_data)
 
 
 @ main.route("/input-data/data-kecamatan/live-search", methods=['GET', 'POST'])
@@ -407,14 +380,11 @@ def input_data_kecamatan_delete():
 @ login_required
 def input_data_desa():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     provinsi = Provinsi.query.all()
     all_data = Desa.query.all()
-    return render_template("input-data-desa.html", foto=image, name=current_user.nama, level=current_user.level, input_data_desa_navbar=active, input_data_master_navbar=active, provinsi=provinsi, desa=all_data)
+    return render_template("input-data-desa.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_desa_navbar=active, input_data_wilayah_navbar=active, provinsi=provinsi, desa=all_data)
 
 
 @ main.route("/input-data/data-desa/live-search", methods=['GET', 'POST'])
@@ -441,18 +411,21 @@ def input_data_desa_add():
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_desa'))
 
-        json = "{}.json".format(id)
-        extfile = file.filename.rsplit('.', 1)[1].lower()
-
-        file.save(os.path.join("app/static/json/temporary", "{}.{}".format(id, extfile)))
-        patoolib.extract_archive("app/static/json/temporary/{}.{}".format(id, extfile), outdir="app/static/json/temporary/")
-
         dir = 'app/static/json/temporary'
-        search_shp = [f for f in os.listdir(dir) if f.endswith(".shp")]
+        if file:
+            json = "{}.json".format(id)
+            extfile = file.filename.rsplit('.', 1)[1].lower()
 
-        gjson = gpd.read_file("app/static/json/temporary/{}".format(search_shp[0]))
-        gjson.to_file("app/static/json/temporary/{}".format(json), driver='GeoJSON')
-        gjson = gjson.to_json()
+            file.save(os.path.join("app/static/json/temporary", "{}.{}".format(id, extfile)))
+            patoolib.extract_archive("app/static/json/temporary/{}.{}".format(id, extfile), outdir="app/static/json/temporary/")
+
+            search_shp = [f for f in os.listdir(dir) if f.endswith(".shp")]
+
+            gjson = gpd.read_file("app/static/json/temporary/{}".format(search_shp[0]))
+            gjson.to_file("app/static/json/temporary/{}".format(json), driver='GeoJSON')
+            gjson = gjson.to_json()
+        else:
+            gjson = None
 
         add_Data = Desa(id_desa=id, id_kec=id_kec, nama=nama, polygon=gjson)
 
@@ -518,14 +491,11 @@ def input_data_desa_delete():
 @ login_required
 def input_data_gapoktan():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     provinsi = Provinsi.query.all()
     all_data = Gapoktan.query.all()
-    return render_template("input-data-gapoktan.html", foto=image, name=current_user.nama, level=current_user.level, input_data_gapoktan_navbar=active, input_data_pertanian_navbar=active, gapoktan=all_data, provinsi=provinsi)
+    return render_template("input-data-gapoktan.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_gapoktan_navbar=active, input_data_pertanian_navbar=active, gapoktan=all_data, provinsi=provinsi)
 
 
 @ main.route("/input-data/data-gapoktan/add", methods=['POST'])
@@ -587,14 +557,11 @@ def input_data_gapoktan_delete():
 @ login_required
 def input_data_kelompok_tani():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     provinsi = Provinsi.query.all()
     all_data = Kelompok_Tani.query.all()
-    return render_template("input-data-kelompok-tani.html", foto=image, name=current_user.nama, level=current_user.level, input_data_kelompok_tani_navbar=active, input_data_pertanian_navbar=active, kelompok_tani=all_data, provinsi=provinsi)
+    return render_template("input-data-kelompok-tani.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_kelompok_tani_navbar=active, input_data_pertanian_navbar=active, kelompok_tani=all_data, provinsi=provinsi)
 
 
 @ main.route("/input-data/data-kelompok-tani/add", methods=['POST'])
@@ -654,19 +621,11 @@ def input_data_kelompok_tani_delete():
 @ login_required
 def input_data_individu_petani():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')  
+    foto = current_user.foto 
 
     provinsi = Provinsi.query.all()
     all_data = Petani.query.all()
-
-    if all_data:
-        for foto in all_data:
-            foto_petani = base64.b64encode(foto.foto).decode('ascii')
-        return render_template("input-data-individu-petani.html", foto_petani=foto_petani, foto=image, name=current_user.nama, level=current_user.level, input_data_individu_petani_navbar=active, input_data_pertanian_navbar=active, individu_petani=all_data, provinsi=provinsi)
-    return render_template("input-data-individu-petani.html", foto=image, name=current_user.nama, level=current_user.level, input_data_individu_petani_navbar=active, input_data_pertanian_navbar=active, individu_petani=all_data, provinsi=provinsi)
+    return render_template("input-data-individu-petani.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_individu_petani_navbar=active, input_data_pertanian_navbar=active, individu_petani=all_data, provinsi=provinsi)
 
 
 @ main.route("/input-data/data-kelompok-tani/live-search", methods=['GET', 'POST'])
@@ -694,8 +653,7 @@ def input_data_individu_petani_add():
         tanggal_lahir = request.form['tanggal_lahir']
         telp = request.form['telp']
         alamat = request.form['alamat']
-        foto = request.files['foto']
-        foto = foto.read()
+        foto_petani = request.files['foto']
         pin_koordinat = request.form['pin_koordinat']
 
         petani = Petani.query.filter_by(id_petani=id).first()
@@ -703,10 +661,18 @@ def input_data_individu_petani_add():
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_individu_petani'))
 
+        foto = ""
+        if foto_petani:
+            extfile = foto_petani.filename.rsplit('.', 1)[1].lower()
+            foto = "{}_petaniimg.{}".format(id, extfile)
+            dir = 'app/static/img/uploaded_images/petani'
+            foto_petani.save(os.path.join(dir, "{}".format(foto)))
+
         add_Data = Petani(id_petani=id, id_poktan=id_poktan, nama=nama, nik=nik, no_kk=no_kk, no_ktp=no_ktp, tempat_lahir=tempat_lahir, tanggal_lahir=tanggal_lahir, telp=telp, alamat=alamat, foto=foto, pin_kordinat=pin_koordinat)
 
         db.session.add(add_Data)
         db.session.commit()
+
         flash("Data berhasil ditambahkan")
 
         return redirect(url_for('main.input_data_individu_petani'))
@@ -725,11 +691,19 @@ def input_data_individu_petani_update():
         update.tanggal_lahir = request.form['tanggal_lahir']
         update.telp = request.form['telp']
         update.alamat = request.form['alamat']
+        update.pin_kordinat = request.form['pin_koordinat']
         foto = request.files['foto']
         if foto:
-            foto = foto.read()
-            update.foto = foto
-        update.pin_kordinat = request.form['pin_koordinat']
+            extfile = foto.filename.rsplit('.', 1)[1].lower()
+            dir = 'app/static/img/uploaded_images/petani'
+
+            if update.foto:
+                os.remove(os.path.join(dir, "{}".format(update.foto)))
+
+            update.foto = "{}_petaniimg.{}".format(update.id_petani, extfile)
+            db.session.commit()
+
+            foto.save(os.path.join(dir, "{}".format(update.foto)))
 
         db.session.commit()
         flash("Data berhasil diubah")
@@ -745,6 +719,11 @@ def input_data_individu_petani_delete():
 
     db.session.delete(delete)
     db.session.commit()
+
+    if delete.foto:
+        dir = 'app/static/img/uploaded_images/petani'
+        os.remove(os.path.join(dir, "{}".format(delete.foto)))
+
     flash("Data berhasil dihapus")
 
     return redirect(url_for('main.input_data_individu_petani'))
@@ -754,19 +733,11 @@ def input_data_individu_petani_delete():
 @ login_required
 def input_data_individu_lahan():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')  
+    foto = current_user.foto 
 
     provinsi = Provinsi.query.all()
     all_data = Lahan.query.all()
-
-    if all_data:
-        for foto in all_data:
-            foto_lahan = base64.b64encode(foto.foto).decode('ascii')
-        return render_template("input-data-individu-lahan.html", foto_lahan=foto_lahan, foto=image, name=current_user.nama, level=current_user.level, input_data_individu_lahan_navbar=active, input_data_pertanian_navbar=active, individu_lahan=all_data, provinsi=provinsi)
-    return render_template("input-data-individu-lahan.html", foto=image, name=current_user.nama, level=current_user.level, input_data_individu_lahan_navbar=active, input_data_pertanian_navbar=active, individu_lahan=all_data, provinsi=provinsi)
+    return render_template("input-data-individu-lahan.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_individu_lahan_navbar=active, input_data_pertanian_navbar=active, individu_lahan=all_data, provinsi=provinsi)
 
 
 @ main.route("/input-data/data-individu-petani/live-search", methods=['GET', 'POST'])
@@ -789,8 +760,7 @@ def input_data_individu_lahan_add():
         alamat = request.form['alamat']
         luas = request.form['luas']
         datetime = request.form['datetime']
-        foto = request.files['foto']
-        foto = foto.read()
+        foto_lahan = request.files['foto']
         file = request.files['json']
 
         lahan = Lahan.query.filter_by(id_lahan=id).first()
@@ -798,26 +768,35 @@ def input_data_individu_lahan_add():
             flash('ID telah digunakan')
             return redirect(url_for('main.input_data_individu_lahan'))
 
-        json = "{}.json".format(id)
-        extfile = file.filename.rsplit('.', 1)[1].lower()
+        foto = ""
+        if foto_lahan:
+            extfile = foto_lahan.filename.rsplit('.', 1)[1].lower()
+            foto = "{}_lahanimg.{}".format(id, extfile)
+            dir_foto = 'app/static/img/uploaded_images/lahan'
+            foto_lahan.save(os.path.join(dir_foto, "{}".format(foto)))
 
-        file.save(os.path.join("app/static/json/temporary", "{}.{}".format(id, extfile)))
-        patoolib.extract_archive("app/static/json/temporary/{}.{}".format(id, extfile), outdir="app/static/json/temporary/")
+        dir_json = 'app/static/json/temporary'
+        gjson = ""
+        if file:
+            json = "{}.json".format(id)
+            extfile = file.filename.rsplit('.', 1)[1].lower()
 
-        dir = 'app/static/json/temporary'
-        search_shp = [f for f in os.listdir(dir) if f.endswith(".shp")]
+            file.save(os.path.join("app/static/json/temporary", "{}.{}".format(id, extfile)))
+            patoolib.extract_archive("app/static/json/temporary/{}.{}".format(id, extfile), outdir="app/static/json/temporary/")
 
-        gjson = gpd.read_file("app/static/json/temporary/{}".format(search_shp[0]))
-        gjson.to_file("app/static/json/temporary/{}".format(json), driver='GeoJSON')
-        gjson = gjson.to_json()
+            search_shp = [f for f in os.listdir(dir_json) if f.endswith(".shp")]
+
+            gjson = gpd.read_file("app/static/json/temporary/{}".format(search_shp[0]))
+            gjson.to_file("app/static/json/temporary/{}".format(json), driver='GeoJSON')
+            gjson = gjson.to_json()
 
         add_Data = Lahan(id_lahan=id, id_petani=id_petani, alamat=alamat, luas=luas, datetime=datetime, foto=foto, polygon=gjson)
 
         db.session.add(add_Data)
         db.session.commit()
 
-        for f in os.listdir(dir):
-            os.remove(os.path.join(dir, f))
+        for f in os.listdir(dir_json):
+            os.remove(os.path.join(dir_json, f))
 
         flash("Data berhasil ditambahkan")
 
@@ -833,17 +812,26 @@ def input_data_individu_lahan_update():
         update.luas = request.form['luas']
         update.datetime = request.form['datetime']
         foto = request.files['foto']
-        if foto:
-            foto = foto.read()
-            update.foto = foto
         file = request.files['json']
 
+        if foto:
+            extfile = foto.filename.rsplit('.', 1)[1].lower()
+            dir = 'app/static/img/uploaded_images/lahan'
+
+            if update.foto:
+                os.remove(os.path.join(dir, "{}".format(update.foto)))
+
+            update.foto = "{}_lahanimg.{}".format(update.id_lahan, extfile)
+            db.session.commit()
+
+            foto.save(os.path.join(dir, "{}".format(update.foto)))
+
         if file:
-            json = "{}.json".format(id)
+            json = "{}.json".format(update.id_lahan)
             extfile = file.filename.rsplit('.', 1)[1].lower()
 
-            file.save(os.path.join("app/static/json/temporary", "{}.{}".format(id, extfile)))
-            patoolib.extract_archive("app/static/json/temporary/{}.{}".format(id, extfile), outdir="app/static/json/temporary/")
+            file.save(os.path.join("app/static/json/temporary", "{}.{}".format(update.id_lahan, extfile)))
+            patoolib.extract_archive("app/static/json/temporary/{}.{}".format(update.id_lahan, extfile), outdir="app/static/json/temporary/")
 
             dir = 'app/static/json/temporary'
             search_shp = [f for f in os.listdir(dir) if f.endswith(".shp")]
@@ -871,6 +859,11 @@ def input_data_individu_lahan_delete():
 
     db.session.delete(delete)
     db.session.commit()
+
+    if delete.foto:
+        dir = 'app/static/img/uploaded_images/lahan'
+        os.remove(os.path.join(dir, "{}".format(delete.foto)))
+
     flash("Data berhasil dihapus")
 
     return redirect(url_for('main.input_data_individu_lahan'))
@@ -880,13 +873,10 @@ def input_data_individu_lahan_delete():
 @ login_required
 def input_data_komoditas():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     all_data = Komoditas.query.all()
-    return render_template("input-data-komoditas.html", foto=image, name=current_user.nama, level=current_user.level, input_data_komoditas_navbar=active, input_data_pertanian_navbar=active, komoditas=all_data)
+    return render_template("input-data-komoditas.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_komoditas_navbar=active, input_data_pertanian_navbar=active, komoditas=all_data)
 
 
 @ main.route("/input-data/data-komoditas/add", methods=['POST'])
@@ -948,13 +938,10 @@ def input_data_komoditas_delete():
 @ login_required
 def input_data_pupuk():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     all_data = Pupuk.query.all()
-    return render_template("input-data-pupuk.html", foto=image, name=current_user.nama, level=current_user.level, input_data_pupuk_navbar=active, input_data_pertanian_navbar=active, pupuk=all_data)
+    return render_template("input-data-pupuk.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_pupuk_navbar=active, input_data_pertanian_navbar=active, pupuk=all_data)
 
 
 @ main.route("/input-data/data-pupuk/add", methods=['POST'])
@@ -1012,85 +999,14 @@ def input_data_pupuk_delete():
     return redirect(url_for('main.input_data_pupuk'))
 
 
-@ main.route("/input-data/data-hama")
-@ login_required
-def input_data_hama():
-    active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
-
-    all_data = Hama.query.all()
-    return render_template("input-data-hama.html", foto=image, name=current_user.nama, level=current_user.level, input_data_hama_navbar=active, input_data_pertanian_navbar=active, hama=all_data)
-
-
-@ main.route("/input-data/data-hama/add", methods=['POST'])
-@ login_required
-def input_data_hama_add():
-    if request.method == 'POST':
-        id = request.form['id']
-        nama = request.form['nama']
-        vol_sat = request.form['volume-satuan']
-        harga = request.form['harga']
-        pemulia = request.form['pemulia']
-        keterangan = request.form['keterangan']
-
-        hama = Hama.query.filter_by(id_hama=id).first()
-        if hama:
-            flash('ID telah digunakan')
-            return redirect(url_for('main.input_data_hama'))
-
-        add_Data = Hama(id_hama=id, nama=nama, vol_sat=vol_sat, harga=harga, pemulia=pemulia, keterangan=keterangan)
-
-        db.session.add(add_Data)
-        db.session.commit()
-        flash("Data berhasil ditambahkan")
-
-        return redirect(url_for('main.input_data_hama'))
-
-
-@ main.route("/input-data/data-hama/update", methods=['GET', 'POST'])
-@ login_required
-def input_data_hama_update():
-    if request.method == 'POST':
-        update = Hama.query.get(request.form.get('id_hama'))
-        update.nama = request.form['nama']
-        update.vol_sat = request.form['volume-satuan']
-        update.harga = request.form['harga']
-        update.pemulia = request.form['pemulia']
-        update.keterangan = request.form['keterangan']
-
-        db.session.commit()
-        flash("Data berhasil diubah")
-
-        return redirect(url_for('main.input_data_hama'))
-
-
-@ main.route("/input-data/data-hama/delete", methods=['GET', 'POST'])
-@ login_required
-def input_data_hama_delete():
-    id_hama = request.form['id_hama']
-    delete = Hama.query.get(id_hama)
-
-    db.session.delete(delete)
-    db.session.commit()
-    flash("Data berhasil dihapus")
-
-    return redirect(url_for('main.input_data_hama'))
-
-
 @ main.route("/input-data/data-racun")
 @ login_required
 def input_data_racun():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     all_data = Racun.query.all()
-    return render_template("input-data-racun.html", foto=image, name=current_user.nama, level=current_user.level, input_data_racun_navbar=active, input_data_pertanian_navbar=active, racun=all_data)
+    return render_template("input-data-racun.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_racun_navbar=active, input_data_pertanian_navbar=active, racun=all_data)
 
 
 @ main.route("/input-data/data-racun/add", methods=['POST'])
@@ -1152,15 +1068,12 @@ def input_data_racun_delete():
 @ login_required
 def input_data_log_tanam():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     all_data = Log_Tanam.query.all()
     provinsi = Provinsi.query.all()
     komoditas = Komoditas.query.all()
-    return render_template("input-data-log-tanam.html", foto=image, name=current_user.nama, level=current_user.level, input_data_log_tanam_navbar=active, input_data_log_pertanian_navbar=active, input_data_pertanian_navbar=active, log_tanam=all_data, provinsi=provinsi, komoditas=komoditas)
+    return render_template("input-data-log-tanam.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_log_tanam_navbar=active, input_data_log_pertanian_navbar=active, input_data_pertanian_navbar=active, log_tanam=all_data, provinsi=provinsi, komoditas=komoditas)
 
 
 @ main.route("/input-data/data-individu-lahan/live-search", methods=['GET', 'POST'])
@@ -1223,15 +1136,12 @@ def input_data_log_tanam_delete():
 @ login_required
 def input_data_log_pupuk_pertanian():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     all_data = Detail_Log_Tanam_Pupuk.query.all()
     provinsi = Provinsi.query.all()
     pupuk = Pupuk.query.all()
-    return render_template("input-data-log-pupuk-pertanian.html", foto=image, name=current_user.nama, level=current_user.level, input_data_log_pupuk_pertanian_navbar=active, input_data_log_pertanian_navbar=active, input_data_pertanian_navbar=active, log_pupuk_pertanian=all_data, provinsi=provinsi, pupuk=pupuk)
+    return render_template("input-data-log-pupuk-pertanian.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_log_pupuk_pertanian_navbar=active, input_data_log_pertanian_navbar=active, input_data_pertanian_navbar=active, log_pupuk_pertanian=all_data, provinsi=provinsi, pupuk=pupuk)
 
 
 @ main.route("/input-data/data-log-tanam/live-search", methods=['GET', 'POST'])
@@ -1285,76 +1195,16 @@ def input_data_log_pupuk_pertanian_delete():
     return redirect(url_for('main.input_data_log_pupuk_pertanian'))
 
 
-@ main.route("/input-data/data-log-hama-pertanian")
-@ login_required
-def input_data_log_hama_pertanian():
-    active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
-
-    all_data = Detail_Log_Tanam_Hama.query.all()
-    provinsi = Provinsi.query.all()
-    hama = Hama.query.all()
-    return render_template("input-data-log-hama-pertanian.html", foto=image, name=current_user.nama, level=current_user.level, input_data_log_hama_pertanian_navbar=active, input_data_log_pertanian_navbar=active, input_data_pertanian_navbar=active, log_hama_pertanian=all_data, provinsi=provinsi, hama=hama)
-
-
-@ main.route("/input-data/data-log-hama-pertanian/add", methods=['POST'])
-@ login_required
-def input_data_log_hama_pertanian_add():
-    if request.method == 'POST':
-        id_log = request.form['log']
-        id_hama = request.form['hama']
-
-        add_Data = Detail_Log_Tanam_Hama(id_log=id_log, id_hama=id_hama)
-
-        db.session.add(add_Data)
-        db.session.commit()
-        flash("Data berhasil ditambahkan")
-
-        return redirect(url_for('main.input_data_log_hama_pertanian'))
-
-
-@ main.route("/input-data/data-log-hama-pertanian/update", methods=['GET', 'POST'])
-@ login_required
-def input_data_log_hama_pertanian_update():
-    if request.method == 'POST':
-        update = Detail_Log_Tanam_Hama.query.get(request.form.get('id_detaillog'))
-        update.id_hama = request.form['hama']
-
-        db.session.commit()
-        flash("Data berhasil diubah")
-
-        return redirect(url_for('main.input_data_log_hama_pertanian'))
-
-
-@ main.route("/input-data/data-log-hama-pertanian/delete", methods=['GET', 'POST'])
-@ login_required
-def input_data_log_hama_pertanian_delete():
-    id_detaillog = request.form['id_detaillog']
-    delete = Detail_Log_Tanam_Hama.query.get(id_detaillog)
-
-    db.session.delete(delete)
-    db.session.commit()
-    flash("Data berhasil dihapus")
-
-    return redirect(url_for('main.input_data_log_hama_pertanian'))
-
-
 @ main.route("/input-data/data-log-racun-pertanian")
 @ login_required
 def input_data_log_racun_pertanian():
     active = 'active'
-
-    image = None
-    if current_user.foto:
-        image = base64.b64encode(current_user.foto).decode('ascii')
+    foto = current_user.foto
 
     all_data = Detail_Log_Tanam_Racun.query.all()
     provinsi = Provinsi.query.all()
     racun = Racun.query.all()
-    return render_template("input-data-log-racun-pertanian.html", foto=image, name=current_user.nama, level=current_user.level, input_data_log_racun_pertanian_navbar=active, input_data_log_pertanian_navbar=active, input_data_pertanian_navbar=active, log_racun_pertanian=all_data, provinsi=provinsi, racun=racun)
+    return render_template("input-data-log-racun-pertanian.html", foto=foto, name=current_user.nama, level=current_user.level, input_data_log_racun_pertanian_navbar=active, input_data_log_pertanian_navbar=active, input_data_pertanian_navbar=active, log_racun_pertanian=all_data, provinsi=provinsi, racun=racun)
 
 
 @ main.route("/input-data/data-log-racun-pertanian/add", methods=['POST'])

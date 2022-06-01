@@ -64,7 +64,7 @@
                       <th>Petani</th>
                       <th>Alamat</th>
                       <th>Luas</th>
-                      <th>Waktu</th>
+                      <th>Waktu Pendataan</th>
                       <th>Foto</th>
                       <th>Peta</th>
                       <th>Action</th>
@@ -79,10 +79,12 @@
                         <td>{{row.luas}}</td>
                         <td>{{row.datetime}}</td>
                         <td>
-                          <img src="data:;base64,{{foto_lahan}}" class="img-circle img-lahan" alt="Lahan Image">
+                          {% if row.foto %}
+                          <img src="../static/img/uploaded_images/lahan/{{row.foto}}" class="img-circle img-lahan" alt="Lahan Image">
+                          {% endif %}
                         </td>
                         <td>
-                          <a class="view-input-data-btn" href="/gis/{{row.id_lahan}}">Lihat</a>
+                          <a class="view-input-data-btn" href="/gis/lahan/{{row.id_lahan}}">Lihat</a>
                         </td>
                         <td>
                           <a class="edit-input-data-btn" href="/input-data/data-individu-lahan/update/{{row.id_lahan}}" data-toggle="modal" data-target="#modaledit{{row.id_lahan}}">Ubah</a>

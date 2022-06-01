@@ -53,9 +53,11 @@
         <li class="nav-item d-none d-sm-inline-block">
         <a href="{{ url_for('main.home') }}" class="nav-link">Beranda</a>
         </li>
-        </li>
         <li class="nav-item d-none d-sm-inline-block">
         <a href="{{ url_for('main.dashboard') }}" class="nav-link">Dashboard</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+        <a class="nav-link active" disabled>Input Data</a>
         </li>
     </ul>
 
@@ -66,7 +68,7 @@
             {% if not foto %}
             <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
             {% else %}
-            <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
+            <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle profile" alt="User Image">
             {% endif %}
             <i class="bi bi-chevron-down iprofile"></i>
         </a>
@@ -75,7 +77,7 @@
                 {% if not foto %}
                 <img src="../static/img/user.png" class="img-circle profile" alt="User Image">
                 {% else %}
-                <img src="data:;base64,{{ foto }}" class="img-circle profile" alt="User Image">
+                <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle profile" alt="User Image">
                 {% endif %}
                 <span class="profile-list">{{name}}</span>
                 <a class="profile-btn" href="{{ url_for('main.profil_me') }}">Profil</a>
@@ -104,7 +106,7 @@
             {% if not foto %}
             <img src="../static/img/user.png" class="img-circle elevation-2" alt="User Image">
             {% else %}
-            <img src="data:;base64,{{ foto }}" class="img-circle elevation-2" alt="User Image">
+            <img src="../static/img/uploaded_images/users/{{ foto }}" class="img-circle elevation-2" alt="User Image">
             {% endif %}
         </div>
         <div class="info">
@@ -131,18 +133,16 @@
                 with font-awesome or any other icon font library -->
             <li class="nav-item">
             {% if input_data_navbar %}
-            <a href="#" class="nav-link {{ input_data_navbar }}">
+            <a class="nav-link {{ input_data_navbar }}" disabled>
             {% else %}
             <a href="{{ url_for('main.input_data') }}" class="nav-link">
             {% endif %}
                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
-                Input Data
-                </p>
+                <p>Input Data</p>
             </a>
             </li>
-            <li class="nav-item">
-            <a href="" class="nav-link {{ input_data_master_navbar }}">
+            <li class="nav-item {% if input_data_wilayah_navbar %} menu-is-opening menu-open {% endif %}">
+            <a href="" class="nav-link {{ input_data_wilayah_navbar }}">
                 <i class="nav-icon fas fa-chart-pie"></i>
                 <p>
                 Data Wilayah
@@ -151,32 +151,48 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_provinsi') }}" class="nav-link {{ input_data_provinsi_navbar }}">
+                {% if input_data_provinsi_navbar %}
+                <a class="nav-link {{ input_data_provinsi_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_provinsi') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Provinsi</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_kabupaten') }}" class="nav-link {{ input_data_kabupaten_navbar }}">
+                {% if input_data_kabupaten_navbar %}
+                <a class="nav-link {{ input_data_kabupaten_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_kabupaten') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Kabupaten/Kota</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_kecamatan') }}" class="nav-link {{ input_data_kecamatan_navbar }}">
+                {% if input_data_kecamatan_navbar %}
+                <a class="nav-link {{ input_data_kecamatan_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_kecamatan') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Kecamatan</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_desa') }}" class="nav-link {{ input_data_desa_navbar }}">
+                {% if input_data_desa_navbar %}
+                <a class="nav-link {{ input_data_desa_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_desa') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Desa</p>
                 </a>
                 </li>
             </ul>
             </li>
-            <li class="nav-item" >
+            <li class="nav-item {% if input_data_pertanian_navbar %} menu-is-opening menu-open {% endif %}">
             <a href="" class="nav-link {{ input_data_pertanian_navbar }}">
                 <i class="nav-icon fas fa-tree"></i>
                 <p>
@@ -186,54 +202,76 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_gapoktan') }}" class="nav-link {{ input_data_gapoktan_navbar }}">
+                {% if input_data_gapoktan_navbar %}
+                <a class="nav-link {{ input_data_gapoktan_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_gapoktan') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Gapoktan</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_kelompok_tani') }}" class="nav-link {{ input_data_kelompok_tani_navbar }}">
+                {% if input_data_kelompok_tani_navbar %}
+                <a class="nav-link {{ input_data_kelompok_tani_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_kelompok_tani') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Kelompok Tani</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_individu_petani') }}" class="nav-link {{ input_data_individu_petani_navbar }}">
+                {% if input_data_individu_petani_navbar %}
+                <a class="nav-link {{ input_data_individu_petani_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_individu_petani') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Individu Petani</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_individu_lahan') }}" class="nav-link {{ input_data_individu_lahan_navbar }}">
+                {% if input_data_individu_lahan_navbar %}
+                <a class="nav-link {{ input_data_individu_lahan_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_individu_lahan') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Individu Lahan</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_komoditas') }}" class="nav-link {{ input_data_komoditas_navbar }}">
+                {% if input_data_komoditas_navbar %}
+                <a class="nav-link {{ input_data_komoditas_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_komoditas') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Komoditas</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_pupuk') }}" class="nav-link {{ input_data_pupuk_navbar }}">
+                {% if input_data_pupuk_navbar %}
+                <a class="nav-link {{ input_data_pupuk_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_pupuk') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pupuk</p>
                 </a>
                 </li>
                 <li class="nav-item">
-                <a href="{{ url_for('main.input_data_hama') }}" class="nav-link {{ input_data_hama_navbar }}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Hama</p>
-                </a>
-                </li>
-                <li class="nav-item">
-                <a href="{{ url_for('main.input_data_racun') }}" class="nav-link {{ input_data_racun_navbar }}">
+                {% if input_data_racun_navbar %}
+                <a class="nav-link {{ input_data_racun_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('main.input_data_racun') }}" class="nav-link">
+                {% endif %}
                     <i class="far fa-circle nav-icon"></i>
                     <p>Racun</p>
                 </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% if input_data_log_pertanian_navbar %} menu-is-opening menu-open {% endif %}">
                 <a href="" class="nav-link {{ input_data_log_pertanian_navbar }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>
@@ -243,28 +281,34 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a href="{{ url_for('main.input_data_log_tanam') }}" class="nav-link {{ input_data_log_tanam_navbar }}">
+                    {% if input_data_log_tanam_navbar %}
+                    <a class="nav-link {{ input_data_log_tanam_navbar }}" disabled>
+                    {% else %}
+                    <a href="{{ url_for('main.input_data_log_tanam') }}" class="nav-link">
+                    {% endif %}
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Log Tanam</p>
-                      </a>
+                    </a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url_for('main.input_data_log_pupuk_pertanian') }}" class="nav-link {{ input_data_log_pupuk_pertanian_navbar }}">
+                    {% if input_data_log_pupuk_pertanian_navbar %}
+                    <a class="nav-link {{ input_data_log_pupuk_pertanian_navbar }}" disabled>
+                    {% else %}
+                    <a href="{{ url_for('main.input_data_log_pupuk_pertanian') }}" class="nav-link">
+                    {% endif %}
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Detail Log Pupuk</p>
-                      </a>
+                    </a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url_for('main.input_data_log_hama_pertanian') }}" class="nav-link {{ input_data_log_hama_pertanian_navbar }}">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Detail Log Hama</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{ url_for('main.input_data_log_racun_pertanian') }}" class="nav-link {{ input_data_log_racun_pertanian_navbar }}">
+                    {% if input_data_log_racun_pertanian_navbar %}
+                    <a class="nav-link {{ input_data_log_racun_pertanian_navbar }}" disabled>
+                    {% else %}
+                    <a href="{{ url_for('main.input_data_log_racun_pertanian') }}" class="nav-link">
+                    {% endif %}
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Detail Log Racun</p>
-                      </a>
+                    </a>
                     </li>
                 </ul>
                 </li>
@@ -306,7 +350,11 @@
             </li>
             {% if level == 1 %}
                 <li class="nav-item">
-                <a href="{{ url_for('auth.input_data_user') }}" class="nav-link {{ input_data_user_navbar }}">
+                {% if input_data_user_navbar %}
+                <a class="nav-link {{ input_data_user_navbar }}" disabled>
+                {% else %}
+                <a href="{{ url_for('auth.input_data_user') }}" class="nav-link">
+                {% endif %}
                     <i class="nav-icon fas fa-user"></i>
                     <p>
                     Data User

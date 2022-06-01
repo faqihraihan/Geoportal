@@ -87,9 +87,11 @@
                         <td>{{row.telp}}</td>
                         <td>{{row.alamat}}</td>
                         <td>
-                          <img src="data:;base64,{{foto_petani}}" class="img-circle img-petani" alt="Petani Image">
+                          {% if row.foto %}
+                          <img src="../static/img/uploaded_images/petani/{{row.foto}}" class="img-circle img-petani" alt="Petani Image">
+                          {% endif %}
                         </td>
-                        <td>{{row.pin_koordinat}}</td>
+                        <td>{{row.pin_kordinat}}</td>
                         <td>
                           <a class="edit-input-data-btn" href="/input-data/data-individu-petani/update/{{row.id_petani}}" data-toggle="modal" data-target="#modaledit{{row.id_petani}}">Ubah</a>
                           <a class="delete-input-data-btn" href="/input-data/data-individu-petani/delete/{{row.id_petani}}" data-toggle="modal" data-target="#modaldelete{{row.id_petani}}">Hapus</a>
